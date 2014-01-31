@@ -5,11 +5,11 @@ Work in progress. Change to meet your needs.
 
 ### Usage
 
-Assuming Larascript is saved to /Sites/Projects/larascripts and your new local website will be located in /Sites, run the following.
+Assuming Larascript is saved to /Sites/Projects/larascript and your new local website will be located in /Sites, run the following.
 
 cd /Sites
 
-Projects/larascripts/larascripts.sh
+Projects/larascript/larascript.sh
 
 Then, answer the questions.
 
