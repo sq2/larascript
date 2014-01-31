@@ -8,6 +8,7 @@ Work in progress. Change to meet your needs.
 Assuming Larascript is saved to /Sites/Projects/larascripts and your new local website will be located in /Sites, run the following.
 
 cd /Sites
+
 Projects/larascripts/larascripts.sh
 
 Then, answer the questions.
