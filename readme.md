@@ -1,6 +1,6 @@
 # Larascript
 
-Larascript offers a quick, customizable way to setup new Laravel 4.1 projects. It is meant to be used with MacOS, for local development. Customize `larascript.sh` to meet your needs.
+Larascript offers a quick, customizable way to setup new Laravel 4.1 projects, from the command line. It is meant to be used with MacOS, for local development. Customize `larascript.sh` to meet your needs.
 
 > **Note:** This script is a functional work in progress. Future updates may include configuration files, a better folder structure and a more dynamic way to include customizations.
 
@@ -13,15 +13,16 @@ Assuming Larascript is saved to `/Sites/Projects/larascript` and your new local 
 cd /Sites
 Projects/larascript/larascript.sh
 ```
-Then, answer the questions.
+Then, answer the questions. If you choose to install Laravel, a folder will be created for you.
 
 
 ### Assumptions
 
 - Familiar with Mac/Linux command line.
-- laravel.phar is installed and added to path.
+- laravel.phar is installed and added to your path. [Install laravel.phar](http://laravel.com/docs/installation#install-laravel)
 - gsed is installed. `brew install gnu-sed`
 - PHP cli version is installed and working.
+- Composer is installed and added to your path. [Get Composer](http://getcomposer.org)
 - Local installation of MySql. _Optional_
 
 
