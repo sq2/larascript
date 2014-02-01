@@ -225,7 +225,7 @@ if [[ $composer == "y" ]]
         composer update
 fi
 
-# What else
+# What else?
 echo
 echo "----------------------------------------------------------------"
 echo
