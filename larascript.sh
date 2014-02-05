@@ -169,15 +169,15 @@ if [[ $custom == "y" ]]
 
         # Add psr-0 entries
         # echo "Adding psr-0 entries..."
-        # php $DIR/scripts/add_to_json.php composer.json .autoload.psr-0.Helpers.app/lib
+        # php $DIR/helpers/add_to_json.php composer.json .autoload.psr-0.Helpers.app/lib
 
         # Add psr-4 entries
         # echo "Adding psr-4 entries..."
-        # php $DIR/scripts/add_to_json.php composer.json ".autoload.psr-4.Helpers\\.app/lib"
+        # php $DIR/helpers/add_to_json.php composer.json ".autoload.psr-4.Helpers\\.app/lib"
 
         # Add to classmap
         # echo "Adding classmap entries..."
-        # php $DIR/scripts/add_to_json.php composer.json ".autoload.classmap.app/composers" array
+        # php $DIR/helpers/add_to_json.php composer.json ".autoload.classmap.app/composers" array
 fi
 
 
