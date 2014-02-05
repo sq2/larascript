@@ -26,7 +26,7 @@
      * The key type will add or modify a json key/value pair.
      * The array type will add to a json array.
      *
-     * @var string
+     * @var string 'key'
      */
     $type = (isset($argv[3])) ? $argv[3] : 'key';
 
@@ -43,9 +43,14 @@
      */
     $json = json_decode(file_get_contents($file), true);
 
-
+    /**
+     * Process the change to the json file.
+     */
     array_set($json, $input, $type);
 
+    /**
+     * Convert array back to json and save the file.
+     */
     file_put_contents($file, json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
 
@@ -82,6 +87,7 @@
             // Add to an array.
             $array[array_shift($keys)][] = $value;
         } else {
+            // Add or modify a key value.
             $array[array_shift($keys)] = $value;
         }
 

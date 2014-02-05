@@ -21,7 +21,7 @@ Then, answer the questions. If you choose to install Laravel, a folder will be c
 - Familiar with Mac/Linux command line.
 - laravel.phar is installed and added to your path. [Install laravel.phar](http://laravel.com/docs/installation#install-laravel)
 - gsed is installed. `brew install gnu-sed`
-- PHP cli version is installed and working.
+- PHP cli version 5.4+ is installed and working.
 - Composer is installed and added to your path. [Get Composer](http://getcomposer.org)
 - Local installation of MySql. _Optional_
 
