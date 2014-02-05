@@ -46,14 +46,25 @@ echo
 echo -n "Move public files to root for shared hosting? (y/n) : "
 read -e public
 if [[ $public == "y" ]]
-    then
-        # Move files and cleanup
-        cd public; mv * ../; cd ..
-        rm -rf public; rm readme.md; rm CONTRIBUTING.md
+then
+    # Move files and cleanup
+    cd public; mv * ../; cd ..
+    rm -rf public; rm readme.md; rm CONTRIBUTING.md
 
-        # Fix paths
-        gsed -i "s@/../bootstrap@/bootstrap@g" index.php
-        gsed -i "s@/../public@/..@" bootstrap/paths.php
+    # Fix paths
+    gsed -i "s@/../bootstrap@/bootstrap@g" index.php
+    gsed -i "s@/../public@/..@" bootstrap/paths.php
+
+    # Copy .htaccess file
+    cp $DIR/src/public/.htaccess .
+else
+    # Cleanup. Should probably be done in Git ignore file instead.
+    cd public
+    rm readme.md; rm CONTRIBUTING.md
+    cd ..
+
+    # Copy .htaccess file to public
+    cp $DIR/src/public/.htaccess public
 fi
 
 
@@ -66,18 +77,18 @@ echo
 echo -n "Set up local environment? (y/n) : "
 read -e environment
 if [[ $environment == "y" ]]
-    then
-        # Change to your hostnames.
-        gsed -i "s/'your-machine-name'/'MacPro1.local', 'MacPro4.local'/" bootstrap/start.php
+then
+    # Change to your hostnames.
+    gsed -i "s/'your-machine-name'/'MacPro1.local', 'MacPro4.local'/" bootstrap/start.php
 
-        # Make local config folder
-        mkdir -p app/config/local
+    # Make local config folder
+    mkdir -p app/config/local
 
-        # Add local config files
-        printf "<?php\n\nreturn array(\n\n'debug' => true,\n\n'url' => 'http://$domain',\n\n);" > app/config/local/app.php
+    # Add local config files
+    printf "<?php\n\nreturn array(\n\n'debug' => true,\n\n'url' => 'http://$domain',\n\n);" > app/config/local/app.php
 
-        # Set production debug to false
-        gsed -i "s/'debug' => true/'debug' => false/" app/config/app.php
+    # Set production debug to false
+    gsed -i "s/'debug' => true/'debug' => false/" app/config/app.php
 fi
 
 # Create mysql database
@@ -127,7 +138,7 @@ if [[ $custom == "y" ]]
         # gsed -i "s/'email' => ''/'email' => 'Your Email Address'/" app/config/workbench.php
 
         # Append to global.php file
-        cat "$DIR/partials/global.php" >> app/start/global.php
+        cat "$DIR/src/app/start/global.php" >> app/start/global.php
 
         # Add extra files for easier management.
         printf "<?php\n\n// View composers" > app/composers.php
@@ -147,9 +158,6 @@ if [[ $custom == "y" ]]
         # Copy library folders
         # echo "Copying library folders..."
         # cp -R $DIR/lib app/
-
-        # Copy .htaccess file
-        cp $DIR/.htaccess .
 
         # Add service providers
         # echo "Adding service providers..."
@@ -208,7 +216,7 @@ if [[ $clockwork == "y" ]]
         gsed -i "/'View'/a \\\t\t'Clockwork' => 'Clockwork\\\Support\\\Laravel\\\Facade'," app/config/app.php
 
         # Append to local.php file
-        cat "$DIR/partials/clockwork.php" >> app/start/local.php
+        cat "$DIR/src/vendor/clockwork.php" >> app/start/local.php
 fi
 
 
