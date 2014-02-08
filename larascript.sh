@@ -10,7 +10,7 @@
 # Set the source path
 SOURCE_PATH="$( cd "$( echo "${BASH_SOURCE[0]%/*}" )"; pwd )"
 
-# Include functions
+# Include any initializations and functions
 . "$SOURCE_PATH"/helpers/init.sh
 
 
@@ -19,7 +19,7 @@ SOURCE_PATH="$( cd "$( echo "${BASH_SOURCE[0]%/*}" )"; pwd )"
 #-----------------------------------------------------------------------
 
 echo
-echo "Get Started Configuring a New Laravel Website"
+echo "Get Started Configuring a New Laravel 4.1 Website"
 echo
 
 # App name
@@ -32,9 +32,9 @@ echo
 read -p "Local domain name? ["$appname.dev"] : " domain
 domain=${domain:-"$appname.dev"}
 
-# Create new laravel Project
+# Create new laravel project
 echo
-echo -n "Create a new Laravel app? (y/n) : "
+echo -n "Create a new Laravel app? (y/n) [n] : "
 read -e laravel
 if [[ $laravel == "y" ]]
 then
@@ -59,7 +59,7 @@ fi
 # Move public files to root. Shit happens.
 if [ -d "public" ]; then
     echo
-    echo -n "Move public files to root for shared hosting? (y/n) : "
+    echo -n "Move public files to root for shared hosting? (y/n) [n] : "
     read -e public
     if [[ $public == "y" ]]
     then
@@ -72,15 +72,25 @@ if [ -d "public" ]; then
         gsed -i "s@/../public@/..@" bootstrap/paths.php
 
         # Copy .htaccess file
-        cp $SOURCE_PATH/src/public/.htaccess .
+        cp "$SOURCE_PATH"/src/public/.htaccess .
+
+        # Make asset folders
+        mkdir img
+        mkdir includes
     else
-        # Cleanup. Should probably be done in Git ignore file instead.
         cd public
+
+        # Make asset folders
+        mkdir img
+        mkdir includes
+
+        # Cleanup. Should probably be done in Git ignore file instead.
         rm readme.md; rm CONTRIBUTING.md
+
         cd ..
 
         # Copy .htaccess file to public
-        cp $SOURCE_PATH/src/public/.htaccess public
+        cp "$SOURCE_PATH"/src/public/.htaccess public
     fi
 fi
 
@@ -91,7 +101,7 @@ fi
 
 # Create a local environment
 echo
-echo -n "Set up local environment? (y/n) : "
+echo -n "Set up local environment? (y/n) [n] : "
 read -e environment
 if [[ $environment == "y" ]]
 then
@@ -137,7 +147,7 @@ fi
 
 # Add custom libraries to service providers and facades
 echo
-echo -n "Add custom libraries and settings to $domain? (y/n) : "
+echo -n "Add custom libraries and settings to $domain? (y/n) [n] : "
 read -e custom
 if [[ $custom == "y" ]]
 then
@@ -165,16 +175,14 @@ then
     mkdir app/views/auth
     mkdir app/views/errors
 
-    # Add asset folders
-    echo "Adding asset folders..."
-    mkdir img
-    mkdir includes
+    # Add asset source folders
+    echo "Adding asset source folders..."
     mkdir javascript
     mkdir less
 
     # Copy library folders
     # echo "Copying library folders..."
-    # cp -R $SOURCE_PATH/lib app/
+    # cp -R "$SOURCE_PATH"/lib app/
 
     # Add service providers
     # echo "Adding service providers..."
@@ -210,7 +218,7 @@ for f in "$SOURCE_PATH"/packages/*.sh; do
 
     ask="packagedev"
 
-    echo -n "Add $package package? (y/n) : "
+    echo -n "Add $package package? (y/n) [n] : "
     read -e ask
     if [[ $ask == "y" ]]
     then
@@ -231,7 +239,7 @@ done
 
 # Composer update
 echo
-echo -n "Run Composer update? (y/n) : "
+echo -n "Run Composer update? (y/n) [n] : "
 read -e composer
 if [[ $composer == "y" ]]
 then
