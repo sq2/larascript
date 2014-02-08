@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # Add Way/Generators package to composer.json
 composer require --dev --no-update way/generators:dev-master
 

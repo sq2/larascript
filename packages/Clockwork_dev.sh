@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # Add Clockwork package to composer.json. Recommended by Jeffrey Way at laracasts.com.
 composer require --dev --no-update itsgoingd/clockwork:dev-master
 
