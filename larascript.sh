@@ -22,6 +22,28 @@ echo
 echo "Get Started Configuring a New Laravel 4.1 Website"
 echo
 
+# Choose a configuration option
+declare -a configs
+for f in "$SOURCE_PATH"/configs/*.sh; do
+    filename=$(basename $f)
+    c=${filename%.*}
+
+    configs+=("$c")
+done
+configs_string=$(printf "%s, " "${configs[@]}")
+
+PS3="Select a config file: "
+select config in "${configs[@]}"
+do
+    case "$config" in
+        "$config") break;;
+        *) printf "\nInvalid option, try again."; continue;; # Default not working yet.
+    esac
+done
+config=${config:-default}
+printf "\n$config configuration selected\n";
+. "$SOURCE_PATH/configs/$config.sh"
+
 # App name
 echo
 echo -n "App name? (Maybe the domain name without the extension) : "
@@ -106,7 +128,9 @@ read -e environment
 if [[ $environment == "y" ]]
 then
     # Change to your hostnames.
-    gsed -i "s/'your-machine-name'/'MacPro1.local', 'MacPro4.local'/" bootstrap/start.php
+    # gsed -i "s/'your-machine-name'/'MacPro1.local', 'MacPro4.local'/" bootstrap/start.php
+    hostnames_string=$(printf "'%s'," "${hostnames[@]}")
+    gsed -i "s/'your-machine-name'/${hostnames_string%??}/" bootstrap/start.php
 
     # Make local config folder
     mkdir -p app/config/local
@@ -161,8 +185,8 @@ then
     gsed -i "s/'prefix' => 'laravel'/'prefix' => '$appname'/" app/config/cache.php
 
     # Workbench settings
-    # gsed -i "s/'name' => ''/'name' => 'Your Name'/" app/config/workbench.php
-    # gsed -i "s/'email' => ''/'email' => 'Your Email Address'/" app/config/workbench.php
+    gsed -i "s/'name' => ''/'name' => '$workbench_author_name'/" app/config/workbench.php
+    gsed -i "s/'email' => ''/'email' => '$workbench_email'/" app/config/workbench.php
 
     # Append to global.php file
     cat "$SOURCE_PATH/src/app/start/global.php" >> app/start/global.php
@@ -243,7 +267,7 @@ echo -n "Run Composer update? (y/n) [n] : "
 read -e composer
 if [[ $composer == "y" ]]
 then
-    composer update
+    composer update --dev
 fi
 
 # What else?
