@@ -129,7 +129,7 @@ if [[ $environment == "y" ]]
 then
     # Change to your hostnames.
     # gsed -i "s/'your-machine-name'/'MacPro1.local', 'MacPro4.local'/" bootstrap/start.php
-    hostnames_string=$(printf "'%s'," "${hostnames[@]}")
+    hostnames_string=$(printf "'%s', " "${hostnames[@]}")
     gsed -i "s/'your-machine-name'/${hostnames_string%??}/" bootstrap/start.php
 
     # Make local config folder
