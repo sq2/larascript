@@ -1,6 +1,6 @@
 # Larascript
 
-Larascript offers a quick, customizable way to setup new Laravel 4.1 ([laravel.com](http://laravel.com)) projects, from the command line. It is meant to be used with MacOS, for local development.
+Larascript offers a quick, customizable way to setup new Laravel 4.1 ([laravel.com](http://laravel.com)) projects, from the command line. It is meant to be used with MacOS, for local development. Since Larascript is used in a very specific environment, it may not be suitable for all situations. Many parts can be slightly modified and used with Linux or Vagrant boxes.
 
 > **Note:** This script is a functional work in progress.
 
