@@ -193,7 +193,7 @@ if [[ $mysqldb == 'y' ]]; then
 
     echo "Creating MySQL database"
     echo "Enter system password"
-    sudo mysql -uroot -p$password -e"CREATE DATABASE $database"
+    sudo mysql -u$mysql_user -p$password -e"CREATE DATABASE $database"
 
     echo Updating database configuration file
     gsed -i "s/'database' => 'database'/'database' => '$database'/" app/config/database.php

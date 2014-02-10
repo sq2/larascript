@@ -2,9 +2,6 @@
 # Append to global.php file
 cat "$PROFILE_PATH/src/app/start/global.php" >> app/start/global.php
 
-# Cache settings
-gsed -i "s/'prefix' => 'laravel'/'prefix' => '$appname'/" app/config/cache.php
-
 # Add extra files for easier management.
 printf "<?php\n\n// View composers" > app/composers.php
 

@@ -12,3 +12,7 @@ session_lifetime="120"
 # Workbench settings
 workbench_author_name=""
 workbench_email=""
+
+
+# MySql
+mysql_user="root"
