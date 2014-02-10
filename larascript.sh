@@ -203,7 +203,7 @@ fi
 
 
 #-----------------------------------------------------------------------
-# SETTINGS                                                             |
+# CUSTOMIZE                                                            |
 #-----------------------------------------------------------------------
 
 # Change Laravel settings.
@@ -216,7 +216,9 @@ if [[ "$profile" != "default" ]]; then
         echo
         echo "Applying settings..."
         gsed -i "s/'lifetime' => 120/'lifetime' => $session_lifetime/" app/config/session.php
-        gsed -i "s/'cookie' => 'laravel_session'/'cookie' => '$appname_session'/" app/config/session.php
+
+        cookie_suffix="_session"
+        gsed -i "s/'cookie' => 'laravel_session'/'cookie' => '$appname$cookie_suffix'/" app/config/session.php
 
         # Workbench settings
         gsed -i "s/'name' => ''/'name' => '$workbench_author_name'/" app/config/workbench.php
@@ -224,13 +226,7 @@ if [[ "$profile" != "default" ]]; then
     fi
 fi
 
-
-#-----------------------------------------------------------------------
-# CUSTOMIZE                                                            |
-#-----------------------------------------------------------------------
-
-# These will be moved to a profile file, for easier configuration.
-
+# Load customizations from selected profile.
 echo
 echo -n "Add customizations? (y/n) [n] : "
 read -e custom
@@ -243,11 +239,15 @@ if [[ $custom == "y" ]]; then
     fi
 fi
 
+# Cache settings
+gsed -i "s/'prefix' => 'laravel'/'prefix' => '$appname'/" app/config/cache.php
+
 
 #-----------------------------------------------------------------------
 # PACKAGES                                                             |
 #-----------------------------------------------------------------------
 
+# Load from packages folder.
 echo
 for f in "$SOURCE_PATH"/packages/*.sh; do
     filename=$(basename $f)
