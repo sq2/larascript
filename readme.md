@@ -52,7 +52,7 @@ A Larascript helper function is used to easily add the facade alias.
 add_alias "Clockwork" "Clockwork\Support\Laravel\Facade"
 ```
 
-A file stored in the Larascript profile src folder will be appended to the end of app/start/local.php. These are some optional functions that I liked from a laracast.com video. The $PROFILE_PATH variable holds the path to the currently selected customization profile.
+A file stored in the Larascript profile src folder will be appended to the end of app/start/local.php. These are some optional functions that I liked from a [laracasts.com](https://laracasts.com) video. The $PROFILE_PATH variable holds the path to the currently selected customization profile.
 ```
 cat "$PROFILE_PATH/src/vendor/clockwork.php" >> app/start/local.php
 ```
