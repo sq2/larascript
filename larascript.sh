@@ -22,31 +22,43 @@ echo
 echo "Get Started Configuring a New Laravel 4.1 Website"
 echo
 
-# Choose a configuration option
-declare -a configs
-for f in "$SOURCE_PATH"/configs/*.sh; do
-    filename=$(basename $f)
-    c=${filename%.*}
+# Choose a profile.
+declare -a profiles
+for f in $(find "$SOURCE_PATH/profiles" -maxdepth 1 -type d); do
+    name=$(basename "$f")
 
-    configs+=("$c")
+    if [[ "$name" != "profiles" ]]; then
+        profiles+=("$name")
+    fi
 done
-configs_string=$(printf "%s, " "${configs[@]}")
 
-PS3="Select a config file: "
-select config in "${configs[@]}"
-do
-    case "$config" in
-        "$config") break;;
-        *) printf "\nInvalid option, try again."; continue;; # Default not working yet.
+PS3="Select a profile file: "
+select profile in "${profiles[@]}"; do
+    if [[ $(containsElement "$profile" "${profiles[@]}"; echo $?) == 1 ]]; then
+        printf "\nInvalid option, try again.\n"; continue;
+    fi
+
+    case "$profile" in
+        "$profile") break;;
     esac
 done
-config=${config:-default}
-printf "\n$config configuration selected\n";
-. "$SOURCE_PATH/configs/$config.sh"
+profile=${profile:-default}
+printf "\n$profile profile selected\n"
+
+# Set selected profile path
+PROFILE_PATH="$SOURCE_PATH/profiles/$profile"
+
+# Load default profile config so custom profile config can override defaults.
+if [[ "$profile" != "default" ]]; then
+    . "$SOURCE_PATH/profiles/default/config.sh"
+fi
+
+# Load custom profile config file.
+. "$PROFILE_PATH/config.sh"
 
 # App name
 echo
-echo -n "App name? (Maybe the domain name without the extension) : "
+echo -n "App name? (Perhaps the domain name without the extension) : "
 read appname
 
 # Local domain name
@@ -58,8 +70,7 @@ domain=${domain:-"$appname.dev"}
 echo
 echo -n "Create a new Laravel app? (y/n) [n] : "
 read -e laravel
-if [[ $laravel == "y" ]]
-then
+if [[ $laravel == "y" ]]; then
     # Assumes that laravel.phar is available globally.
     # wget http://laravel. com/laravel.phar
     # chmod 755 laravel.phar
@@ -83,38 +94,58 @@ if [ -d "public" ]; then
     echo
     echo -n "Move public files to root for shared hosting? (y/n) [n] : "
     read -e public
-    if [[ $public == "y" ]]
-    then
-        # Move files and cleanup
+    if [[ $public == "y" ]]; then
+        # Move files
         cd public; mv * ../; cd ..
+
+        # Cleanup. Should probably be done in .gitignore file instead.
         rm -rf public; rm readme.md; rm CONTRIBUTING.md
 
         # Fix paths
         gsed -i "s@/../bootstrap@/bootstrap@g" index.php
         gsed -i "s@/../public@/..@" bootstrap/paths.php
 
-        # Copy .htaccess file
-        cp "$SOURCE_PATH"/src/public/.htaccess .
-
-        # Make asset folders
-        mkdir img
-        mkdir includes
+        PUBLIC_PATH="$WORK_PATH"
     else
-        cd public
+        echo
+        echo -n "Move public files to public_html folder? (y/n) [n] : "
+        read -e publichtml
+        if [[ $publichtml == "y" ]]; then
+            # Rename public to public_html.
+            mv public public_html
 
-        # Make asset folders
-        mkdir img
-        mkdir includes
+            # Fix paths
+            gsed -i "s@/../public@/../public_html@" bootstrap/paths.php
 
-        # Cleanup. Should probably be done in Git ignore file instead.
-        rm readme.md; rm CONTRIBUTING.md
+            PUBLIC_PATH="$WORK_PATH/public_html"
+        else
+            # Default public folder.
+            PUBLIC_PATH="$WORK_PATH/public"
+        fi
+    fi
 
-        cd ..
+    # Make asset folders
+    mkdir "$PUBLIC_PATH/img"
+    mkdir "$PUBLIC_PATH/includes"
 
-        # Copy .htaccess file to public
-        cp "$SOURCE_PATH"/src/public/.htaccess public
+    # Copy .htaccess file to public
+    if [[ -e "$PROFILE_PATH/src/public/.htaccess" ]]; then
+        cp "$PROFILE_PATH/src/public/.htaccess" "$PUBLIC_PATH"
+    fi
+else
+    # Set public folder.
+    if [ -d "public" ]; then
+        PUBLIC_PATH="$WORK_PATH/public"
+    elif [[ -d "public_html" ]]; then
+        PUBLIC_PATH="$WORK_PATH/public_html"
+    else
+        PUBLIC_PATH="$WORK_PATH"
     fi
 fi
+
+echo
+echo "Public path is $PUBLIC_PATH"
+echo
 
 
 #-----------------------------------------------------------------------
@@ -125,10 +156,8 @@ fi
 echo
 echo -n "Set up local environment? (y/n) [n] : "
 read -e environment
-if [[ $environment == "y" ]]
-then
-    # Change to your hostnames.
-    # gsed -i "s/'your-machine-name'/'MacPro1.local', 'MacPro4.local'/" bootstrap/start.php
+if [[ $environment == "y" ]]; then
+    # Update hostnames
     hostnames_string=$(printf "'%s', " "${hostnames[@]}")
     gsed -i "s/'your-machine-name'/${hostnames_string%??}/" bootstrap/start.php
 
@@ -136,7 +165,16 @@ then
     mkdir -p app/config/local
 
     # Add local config files
-    printf "<?php\n\nreturn array(\n\n'debug' => true,\n\n'url' => 'http://$domain',\n\n);" > app/config/local/app.php
+    printf "<?php\n\nreturn array(\n\n\t'debug' => true,\n\n\t'url' => 'http://$domain',\n\n);" > app/config/local/app.php
+
+    if [[ -e "$PROFILE_PATH/src/app/config/local/session.php" ]]; then
+        cp "$PROFILE_PATH/src/app/config/local/session.php" app/config/local/
+        gsed -i "s/'lifetime' => 120/'lifetime' => $session_lifetime/" app/config/local/session.php
+
+        if [[ "$session_domain" != "null" ]]; then
+            gsed -i "s/'domain' => null/'domain' => '$domain'/" app/config/local/session.php
+        fi
+    fi
 
     # Set production debug to false
     gsed -i "s/'debug' => true/'debug' => false/" app/config/app.php
@@ -144,10 +182,9 @@ fi
 
 # Create mysql database
 echo
-echo -n "Does your app require a MySql database? : (y/n) "
+echo -n "Does this app require a MySql database? (y/n) [n] : "
 read -e mysqldb
-if [[ $mysqldb == 'y' ]]
-then
+if [[ $mysqldb == 'y' ]]; then
     echo -n "What is the name of the database for this app? : "
     read -e database
 
@@ -166,67 +203,44 @@ fi
 
 
 #-----------------------------------------------------------------------
+# SETTINGS                                                             |
+#-----------------------------------------------------------------------
+
+# Change Laravel settings.
+if [[ "$profile" != "default" ]]; then
+    echo
+    echo -n "Apply profile configuration settings? (y/n) [n] : "
+    read -e settings
+    if [[ $settings == "y" ]]; then
+        # Session settings
+        echo
+        echo "Applying settings..."
+        gsed -i "s/'lifetime' => 120/'lifetime' => $session_lifetime/" app/config/session.php
+        gsed -i "s/'cookie' => 'laravel_session'/'cookie' => '$appname_session'/" app/config/session.php
+
+        # Workbench settings
+        gsed -i "s/'name' => ''/'name' => '$workbench_author_name'/" app/config/workbench.php
+        gsed -i "s/'email' => ''/'email' => '$workbench_email'/" app/config/workbench.php
+    fi
+fi
+
+
+#-----------------------------------------------------------------------
 # CUSTOMIZE                                                            |
 #-----------------------------------------------------------------------
 
-# Add custom libraries to service providers and facades
+# These will be moved to a profile file, for easier configuration.
+
 echo
-echo -n "Add custom libraries and settings to $domain? (y/n) [n] : "
+echo -n "Add customizations? (y/n) [n] : "
 read -e custom
-if [[ $custom == "y" ]]
-then
-    # Session settings
-    echo
-    echo "Configuring settings..."
-    gsed -i "s/'lifetime' => 120/'lifetime' => 240/" app/config/session.php
-    gsed -i "s/'cookie' => 'laravel_session'/'cookie' => '$appname_session'/" app/config/session.php
-
-    # Cache settings
-    gsed -i "s/'prefix' => 'laravel'/'prefix' => '$appname'/" app/config/cache.php
-
-    # Workbench settings
-    gsed -i "s/'name' => ''/'name' => '$workbench_author_name'/" app/config/workbench.php
-    gsed -i "s/'email' => ''/'email' => '$workbench_email'/" app/config/workbench.php
-
-    # Append to global.php file
-    cat "$SOURCE_PATH/src/app/start/global.php" >> app/start/global.php
-
-    # Add extra files for easier management.
-    printf "<?php\n\n// View composers" > app/composers.php
-
-    # Views
-    mkdir app/views/layouts
-    mkdir app/views/auth
-    mkdir app/views/errors
-
-    # Add asset source folders
-    echo "Adding asset source folders..."
-    mkdir javascript
-    mkdir less
-
-    # Copy library folders
-    # echo "Copying library folders..."
-    # cp -R "$SOURCE_PATH"/lib app/
-
-    # Add service providers
-    # echo "Adding service providers..."
-    # add_service_provider "VendorName\Product\ProductServiceProvider"
-
-    # Add aliases
-    echo "Adding facade aliases..."
-    add_alias "Carbon" "Carbon\Carbon"
-
-    # Add psr-0 entries
-    # echo "Adding psr-0 entries..."
-    # add_to_composer ".autoload.psr-0.Helpers.app/lib"
-
-    # Add psr-4 entries
-    # echo "Adding psr-4 entries..."
-    # add_to_composer ".autoload.psr-4.Helpers\\.app/lib"
-
-    # Add to classmap
-    # echo "Adding classmap entries..."
-    # add_to_composer ".autoload.classmap.app/composers" array
+if [[ $custom == "y" ]]; then
+    if [[ -e "$PROFILE_PATH/custom.sh" ]]; then
+        . "$PROFILE_PATH/custom.sh"
+    else
+        echo
+        echo "Skipping. File custom.sh not found in $PROFILE_PATH"
+    fi
 fi
 
 
@@ -244,13 +258,12 @@ for f in "$SOURCE_PATH"/packages/*.sh; do
 
     echo -n "Add $package package? (y/n) [n] : "
     read -e ask
-    if [[ $ask == "y" ]]
-    then
+    if [[ $ask == "y" ]]; then
         echo
         echo "Adding $package..."
-        echo
 
         . "$f"
+        echo
     else
         echo
     fi
@@ -265,14 +278,14 @@ done
 echo
 echo -n "Run Composer update? (y/n) [n] : "
 read -e composer
-if [[ $composer == "y" ]]
-then
+if [[ $composer == "y" ]]; then
     composer update --dev
 fi
 
 # What else?
 echo
 echo "----------------------------------------------------------------"
+echo "Larascript setup complete."
 echo
 echo "The following items will need to be handled manually (for now):"
 echo

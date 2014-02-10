@@ -1,3 +1,9 @@
+containsElement () {
+  local e
+  for e in "${@:2}"; do [[ "$e" == "$1" ]] && return 0; done
+  return 1
+}
+
 add_service_provider () {
     php "$SOURCE_PATH"/helpers/add_service_provider.php "$1" "$WORK_PATH/${2:-app/config/app.php}"
 }

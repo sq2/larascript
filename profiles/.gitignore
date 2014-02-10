@@ -1,0 +1,9 @@
+*
+!.gitignore
+!default/
+!default/*
+!default/*/*
+!default/*/*/*
+!default/*/*/*/*
+!default/*/*/*/*/*
+!default/*/*/*/*/*/*

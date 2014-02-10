@@ -8,4 +8,4 @@ add_service_provider "Clockwork\Support\Laravel\ClockworkServiceProvider"
 add_alias "Clockwork" "Clockwork\Support\Laravel\Facade"
 
 # Append to local.php file
-cat "$SOURCE_PATH/src/vendor/clockwork.php" >> app/start/local.php
+cat "$PROFILE_PATH/src/vendor/clockwork.php" >> app/start/local.php
