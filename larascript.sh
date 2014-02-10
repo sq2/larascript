@@ -71,14 +71,13 @@ echo
 echo -n "Create a new Laravel app? (y/n) [n] : "
 read -e laravel
 if [[ $laravel == "y" ]]; then
-    # Assumes that laravel.phar is available globally.
-    # wget http://laravel. com/laravel.phar
-    # chmod 755 laravel.phar
-    # mv laravel.phar /usr/local/bin/laravel
-    laravel new $domain
-
-    # Use create-project instead
-    # composer create-project laravel/laravel $domain --prefer-dist
+    if [[ $laravel_installer == "laravel" ]]; then
+        # Use laravel.phar
+        laravel new $domain
+    else
+        # Use create-project
+        composer create-project laravel/laravel $domain --prefer-dist
+    fi
 
     cd $domain
     WORK_PATH=$(pwd)

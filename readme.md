@@ -1,6 +1,6 @@
 # Larascript
 
-Larascript offers a quick, customizable way to setup new Laravel 4.1 ([laravel.com](http://laravel.com)) projects, from the command line. It is meant to be used with MacOS, for local development. Since Larascript is used in a very specific environment, it may not be suitable for all situations. Many parts can be slightly modified and used with Linux or Vagrant boxes.
+Larascript offers a quick, customizable way to setup new Laravel 4.1 ([laravel.com](http://laravel.com)) projects, from the command line. It is meant to be used with MacOS, for local development. Since Larascript is used in a pretty specific environment, it may not be suitable for all situations. Many parts can be slightly modified and used with Linux or Vagrant boxes.
 
 > **Note:** This script is a functional work in progress.
 
@@ -8,11 +8,11 @@ Larascript offers a quick, customizable way to setup new Laravel 4.1 ([laravel.c
 ### Assumptions
 
 - Familiar with Mac/Linux command line.
-- laravel.phar is installed and added to your path. [Install laravel.phar](http://laravel.com/docs/installation#install-laravel)
+- Composer is installed globally and added to the PATH. [Get Composer](http://getcomposer.org)
+- PHP cli version 5.4+ is installed and working. [OS X PHP Installer](http://php-osx.liip.ch)
 - gsed is installed. `brew install gnu-sed`
-- PHP cli version 5.4+ is installed and working.
-- Composer is installed and added to your path. [Get Composer](http://getcomposer.org)
-- Local installation of MySql. _Optional_
+- _Optional_ - Install laravel.phar globally for much faster installations. Change setting in profile config. [Install laravel.phar](http://laravel.com/docs/installation#install-laravel)
+- _Optional_ - Local installation of MySql.
 
 
 ### Usage
@@ -26,6 +26,21 @@ cd /Sites
 Projects/larascript/larascript.sh
 ```
 Then, answer the questions. If you choose to install Laravel, a project folder will be created for you.
+
+
+## Features
+
+- A step-by-step interactive Laravel setup process. It asks you questions.
+- Setup multiple profiles for different Laravel configurations.
+- Change settings automatically during setup.
+- Local environment setup with hostname detection. Production debug is set to false.
+- Package configuration files may be added. During the Laravel installation, each will ask if it should be installed.
+- Easily allow the addition of service providers and aliases for packages and custom code.
+- Simple functions for adding psr-0, psr-4 and items to the classmap array, in composer.json.
+- Optional MySql database configuration, if MySql is installed.
+- Add common files and folders.
+- Public files may be moved to public_html or to the root (for shared hosting), with references automatically updated.
+- A place to add customizations, with some commented out sample code.
 
 
 ## Customizations
