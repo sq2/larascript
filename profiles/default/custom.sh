@@ -2,7 +2,8 @@
 # Append to global.php file
 cat "$PROFILE_PATH/src/app/start/global.php" >> app/start/global.php
 
-# Add extra files for easier management.
+# Add extra files for easier management. This option depends on
+# content in the profile/src/app/start/global.php file.
 printf "<?php\n\n// View composers" > app/composers.php
 
 # Add view folders
