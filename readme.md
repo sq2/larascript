@@ -72,6 +72,11 @@ A file stored in the Larascript profile src folder will be appended to the end o
 cat "$PROFILE_PATH/src/vendor/clockwork.php" >> app/start/local.php
 ```
 
+#### Autoloading Packages
+
+Add the `autoload` command within a package file, to avoid being prompted to install the package. Place it on a line by itself, preferably near the top of the file.
+
+
 ### About the Developer
 
 Hello, my name is Matt. I have been programming in one form or another since 1993. My Twitter handle is @codepl. I code a lot and say very little, so I only have 7 followers. But, they are all awesome.

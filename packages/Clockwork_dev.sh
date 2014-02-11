@@ -1,3 +1,6 @@
+# Uncomment the following line to autoload this package.
+#autoload
+
 # Add Clockwork package to composer.json. Recommended by Jeffrey Way at laracasts.com.
 composer require --dev --no-update itsgoingd/clockwork:dev-master
 

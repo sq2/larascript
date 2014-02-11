@@ -255,8 +255,13 @@ for f in "$SOURCE_PATH"/packages/*.sh; do
     package=${filename%.*}
     package=$(echo $package | tr "_" " ")
 
-    echo -n "Add $package package? (y/n) [n] : "
-    read -e load_package
+    if [[ $(autoloadCheck "$f"; echo $?) == 1 ]]; then
+        echo -n "Add $package package? (y/n) [n] : "
+        read -e load_package
+    else
+        load_package="y"
+    fi
+
     if [[ $load_package == "y" ]]; then
         echo
         echo "Adding $package..."
