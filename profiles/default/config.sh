@@ -37,4 +37,5 @@ workbench_email=""
 
 
 # MySql
+mysql_skip=false # Set to true to skip this section
 mysql_user="root"

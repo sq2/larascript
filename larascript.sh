@@ -182,24 +182,26 @@ if [[ $environment == "y" ]]; then
 fi
 
 # Create mysql database
-echo
-echo -n "Does this app require a MySql database? (y/n) [n] : "
-read -e mysqldb
-if [[ $mysqldb == 'y' ]]; then
-    echo -n "What is the name of the database for this app? : "
-    read -e database
+if [[ $mysql_skip == false ]]; then
+    echo
+    echo -n "Does this app require a MySql database? (y/n) [n] : "
+    read -e mysqldb
+    if [[ $mysqldb == 'y' ]]; then
+        echo -n "What is the name of the database for this app? : "
+        read -e database
 
-    echo -n "Enter a database password? : "
-    read -e password
+        echo -n "Enter a database password? : "
+        read -e password
 
-    echo "Creating MySQL database"
-    echo "Enter system password"
-    sudo mysql -u$mysql_user -p$password -e"CREATE DATABASE $database"
+        echo "Creating MySQL database"
+        echo "Enter system password"
+        sudo mysql -u$mysql_user -p$password -e"CREATE DATABASE $database"
 
-    echo Updating database configuration file
-    gsed -i "s/'database' => 'database'/'database' => '$database'/" app/config/database.php
-    gsed -i "s/'password'  => ''/'password'  => '$password'/" app/config/database.php
-    # gsed -i "s/'username'  => 'root'/'username'  => '$username'/" app/config/database.php
+        echo Updating database configuration file
+        gsed -i "s/'database' => 'database'/'database' => '$database'/" app/config/database.php
+        gsed -i "s/'password'  => ''/'password'  => '$password'/" app/config/database.php
+        # gsed -i "s/'username'  => 'root'/'username'  => '$username'/" app/config/database.php
+    fi
 fi
 
 
