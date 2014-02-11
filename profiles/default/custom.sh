@@ -23,20 +23,20 @@ mkdir less
 
 # Add service providers
 # echo "Adding service providers..."
-# add_service_provider "VendorName\Product\ProductServiceProvider"
+# addServiceProvider "VendorName\Product\ProductServiceProvider"
 
 # Add aliases
 echo "Adding facade aliases..."
-add_alias "Carbon" "Carbon\Carbon"
+addAlias "Carbon" "Carbon\Carbon"
 
 # Add psr-0 entries
 # echo "Adding psr-0 entries..."
-# add_to_composer ".autoload.psr-0.Helpers.app/lib"
+# addToComposer ".autoload.psr-0.Helpers.app/lib"
 
 # Add psr-4 entries
 # echo "Adding psr-4 entries..."
-# add_to_composer ".autoload.psr-4.Helpers\\.app/lib"
+# addToComposer ".autoload.psr-4.Helpers\\.app/lib"
 
 # Add to classmap
 # echo "Adding classmap entries..."
-# add_to_composer ".autoload.classmap.app/composers" array
+# addToComposer ".autoload.classmap.app/composers" array

@@ -1,9 +1,11 @@
 #!/bin/bash
 
 #
-# Larascript. Bash interactive Laravel setup script.
+# Larascript. Bash interactive Laravel setup script, for Mac OS.
 # https://github.com/sq2/larascript
 # By @Codepl
+#
+# Works fine on my Mac. Use at your own risk.
 #
 
 
@@ -202,7 +204,7 @@ fi
 
 
 #-----------------------------------------------------------------------
-# CUSTOMIZE                                                            |
+# PROFILE CUSTOMIZATIONS                                               |
 #-----------------------------------------------------------------------
 
 # Change Laravel settings.
@@ -253,11 +255,9 @@ for f in "$SOURCE_PATH"/packages/*.sh; do
     package=${filename%.*}
     package=$(echo $package | tr "_" " ")
 
-    ask="packagedev"
-
     echo -n "Add $package package? (y/n) [n] : "
-    read -e ask
-    if [[ $ask == "y" ]]; then
+    read -e load_package
+    if [[ $load_package == "y" ]]; then
         echo
         echo "Adding $package..."
 
