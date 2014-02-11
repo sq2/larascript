@@ -273,6 +273,31 @@ for f in "$SOURCE_PATH"/packages/*.sh; do
     fi
 done
 
+# Load from profile packages folder.
+# TODO: DRY this up
+echo
+for f in "$PROFILE_PATH"/packages/*.sh; do
+    filename=$(basename $f)
+    package=${filename%.*}
+    package=$(echo $package | tr "_" " ")
+
+    if [[ $(autoloadCheck "$f"; echo $?) == 1 ]]; then
+        echo -n "Add $package package? (y/n) [n] : "
+        read -e load_package
+    else
+        load_package="y"
+    fi
+
+    if [[ $load_package == "y" ]]; then
+        echo
+        echo "Adding $package..."
+
+        . "$f"
+        echo
+    else
+        echo
+    fi
+done
 
 #-----------------------------------------------------------------------
 # FINAL                                                                |

@@ -49,8 +49,7 @@ Just duplicate the `profiles/default` folder and name it. This will be your new 
 
 ### Packages
 
-Create a new file in the `packages` folder for each package Larascript should ask you to install. For example, one of the included packages is Clockwork. The filename is `Clockwork_dev.sh`. There are a few commands in this file that Larascript will use to configure this package.
-
+Packages can be used to save and load a group of commands, in a modular way. For each package, Larascript will ask you if you want to load it, unless autoload is enabled. Packages can be available globally by placing them in the `packages` folder, or per profile by placing them in the `profiles/profile_name/packages` folder. Packages bundled with Larascript are located under `profiles/default/packages`. For example, one of the included packages is Clockwork. The filename is `Clockwork_dev.sh`. There are a few commands in this file that Larascript will use to configure this package.
 
 Composer command to add this package to the composer.json file as a require-dev item.
 ```
