@@ -218,9 +218,7 @@ if [[ "$profile" != "default" ]]; then
         echo
         echo "Applying settings..."
         gsed -i "s/'lifetime' => 120/'lifetime' => $session_lifetime/" app/config/session.php
-
-        cookie_suffix="_session"
-        gsed -i "s/'cookie' => 'laravel_session'/'cookie' => '$appname$cookie_suffix'/" app/config/session.php
+        gsed -i "s/'cookie' => 'laravel_session'/'cookie' => '${appname}_session'/" app/config/session.php
 
         # Workbench settings
         gsed -i "s/'name' => ''/'name' => '$workbench_author_name'/" app/config/workbench.php
