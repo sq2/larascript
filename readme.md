@@ -19,27 +19,27 @@ Larascript offers a quick, customizable way to setup new Laravel 4.1 ([laravel.c
 
 > **Note:** `larascript.sh` may not be executable when first installed. From its folder, try running `chmod +x larascript.sh`.
 
-Assuming Larascript is saved to `/Sites/Projects/larascript` and your new local website will be located in `/Sites`, run the following.
+Assuming Larascript is saved to `/Sites/larascript` and your new local website will be located in `/Sites/new_website.dev`, run the following.
 
 ```shell
 cd /Sites
-Projects/larascript/larascript.sh
+larascript/larascript.sh
 ```
-Then, answer the questions. If you choose to install Laravel, a project folder will be created for you.
+Then, answer the questions. If you choose to install Laravel, a project folder (in this case `new_website.dev`) will be created for you.
 
 
 ## Features
 
 - A step-by-step interactive Laravel setup process. It asks you questions.
 - Setup multiple profiles for different Laravel configurations.
-- Change settings automatically during setup.
+- Changes settings automatically during setup.
 - Local environment setup with hostname detection. Production debug is set to false.
-- Package configuration files may be added. During the Laravel installation, each will ask if it should be installed.
-- Easily allow the addition of service providers and aliases for packages and custom code.
+- Package configuration files may be added. During the Laravel installation, each will ask if it should be installed, unless autoload is enabled.
+- Easy functions for adding service providers and aliases for packages and custom code.
 - Simple functions for adding psr-0, psr-4 and items to the classmap array, in composer.json.
 - Optional MySql database configuration, if MySql is installed.
 - Add common files and folders.
-- Public files may be moved to public_html or to the root (for shared hosting), with references automatically updated.
+- Public files may be moved to `public_html` or to the root folder (for shared hosting and such), with references automatically updated.
 - A place to add customizations, with some commented out sample code.
 
 
