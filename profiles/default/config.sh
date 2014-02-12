@@ -4,7 +4,7 @@
 
 # Larascript can install Laravel using one of two methods.
 #
-## Method 1 (composer). Use Composer's create-project command. Composer must be
+# Method 1 (composer). Use Composer's create-project command. Composer must be
 # installed globally and renamed from composer.phar to composer.
 # See https://getcomposer.org/doc/00-intro.md#globally
 #

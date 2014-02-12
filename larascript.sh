@@ -250,14 +250,16 @@ gsed -i "s/'prefix' => 'laravel'/'prefix' => '$appname'/" app/config/cache.php
 # PACKAGES                                                             |
 #-----------------------------------------------------------------------
 
-# Load from packages folder.
+# Load packages.
 echo
-for f in "$SOURCE_PATH"/packages/*.sh; do
+for f in "$SOURCE_PATH"/packages/*.sh "$PROFILE_PATH"/packages/*.sh; do
+    [[ -e "$f" ]] || continue
+
     filename=$(basename $f)
     package=${filename%.*}
     package=$(echo $package | tr "_" " ")
 
-    if [[ $(autoloadCheck "$f"; echo $?) == 1 ]]; then
+    if [[ $(autoloadCheck "$f"; echo $?) != 0 ]]; then
         echo -n "Add $package package? (y/n) [n] : "
         read -e load_package
     else
@@ -269,37 +271,12 @@ for f in "$SOURCE_PATH"/packages/*.sh; do
         echo "Adding $package..."
 
         . "$f"
-        echo
-    else
-        echo
     fi
+
+    cd $WORK_PATH
+    echo
 done
 
-# Load from profile packages folder.
-# TODO: DRY this up
-echo
-for f in "$PROFILE_PATH"/packages/*.sh; do
-    filename=$(basename $f)
-    package=${filename%.*}
-    package=$(echo $package | tr "_" " ")
-
-    if [[ $(autoloadCheck "$f"; echo $?) == 1 ]]; then
-        echo -n "Add $package package? (y/n) [n] : "
-        read -e load_package
-    else
-        load_package="y"
-    fi
-
-    if [[ $load_package == "y" ]]; then
-        echo
-        echo "Adding $package..."
-
-        . "$f"
-        echo
-    else
-        echo
-    fi
-done
 
 #-----------------------------------------------------------------------
 # FINAL                                                                |
