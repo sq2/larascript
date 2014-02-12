@@ -34,7 +34,7 @@ for f in $(find "$SOURCE_PATH/profiles" -maxdepth 1 -type d); do
     fi
 done
 
-PS3="Select a profile file: "
+PS3="Select a profile: "
 select profile in "${profiles[@]}"; do
     if [[ $(containsElement "$profile" "${profiles[@]}"; echo $?) == 1 ]]; then
         printf "\nInvalid option, try again.\n"; continue;
@@ -145,8 +145,7 @@ else
 fi
 
 echo
-echo "Public path is $PUBLIC_PATH"
-echo
+echo "NOTE: Public path is $PUBLIC_PATH"
 
 
 #-----------------------------------------------------------------------
@@ -238,7 +237,7 @@ if [[ $custom == "y" ]]; then
         . "$PROFILE_PATH/custom.sh"
     else
         echo
-        echo "Skipping. File custom.sh not found in $PROFILE_PATH"
+        echo "SKIPPING: File custom.sh not found in $PROFILE_PATH"
     fi
 fi
 
@@ -254,6 +253,8 @@ gsed -i "s/'prefix' => 'laravel'/'prefix' => '$appname'/" app/config/cache.php
 echo
 for f in "$SOURCE_PATH"/packages/*.sh "$PROFILE_PATH"/packages/*.sh; do
     [[ -e "$f" ]] || continue
+
+    cd $WORK_PATH
 
     filename=$(basename $f)
     package=${filename%.*}
@@ -273,7 +274,6 @@ for f in "$SOURCE_PATH"/packages/*.sh "$PROFILE_PATH"/packages/*.sh; do
         . "$f"
     fi
 
-    cd $WORK_PATH
     echo
 done
 
@@ -293,7 +293,8 @@ fi
 # What else?
 echo
 echo "----------------------------------------------------------------"
-echo "Larascript setup complete."
+echo "Larascript Setup Complete"
+echo "----------------------------------------------------------------"
 echo
 echo "The following items will need to be handled manually (for now):"
 echo

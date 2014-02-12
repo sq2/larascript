@@ -13,6 +13,24 @@ addToComposer () {
     php "$SOURCE_PATH"/helpers/addToJson.php "$1" "${2:-key}" "$WORK_PATH/${3:-composer.json}"
 }
 
+# Usage: commandExists composer
+commandExists () {
+    type "$1" &> /dev/null
+}
+
+commandCheck () {
+    if commandExists "$1" ; then
+        return 0
+    fi
+
+    echo
+    echo "$1 not found. $1 must be installed and in your PATH."
+    echo
+    echo "Exiting Larascript"
+    echo
+    exit 1;
+}
+
 # Usage: containsElement "value" "array"
 containsElement () {
   local e
