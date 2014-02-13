@@ -18,6 +18,7 @@ commandExists () {
     type "$1" &> /dev/null
 }
 
+# Usage: commandCheck composer
 commandCheck () {
     if commandExists "$1" ; then
         return 0
@@ -38,6 +39,15 @@ containsElement () {
   return 1
 }
 
+# Usage: containsString "needle" "haystack"
+containsString () {
+    if [[ $2 == *$1* ]]; then
+        return 0
+    fi
+
+    return 1
+}
+
 # Make autoload command available.
 autoload () {
     return 0
@@ -55,3 +65,17 @@ autoloadCheck () {
     return 1
 }
 
+# Usage: stringReplace "/" "from" "to" "path/file"
+# Usage: stringReplace "@g" "from" "to" "path/file"
+# Make sure separator character (first arg) is not found in strings. The g
+# added after the separator will replace 'from' throughout file globally.
+stringReplace () {
+    sep=${1: -1}
+    global=""
+
+    if [[ $1 == *g* ]]; then
+        global="g"
+    fi
+
+    gsed -i "s$sep${2}$sep${3}$sep$global" $4
+}

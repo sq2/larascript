@@ -103,8 +103,8 @@ if [ -d "public" ]; then
         rm -rf public; rm readme.md; rm CONTRIBUTING.md
 
         # Fix paths
-        gsed -i "s@/../bootstrap@/bootstrap@g" index.php
-        gsed -i "s@/../public@/..@" bootstrap/paths.php
+        stringReplace "@g" "/../bootstrap" "/bootstrap" index.php
+        stringReplace "@" "/../public" "/.." bootstrap/paths.php
 
         PUBLIC_PATH="$WORK_PATH"
     else
@@ -116,7 +116,7 @@ if [ -d "public" ]; then
             mv public public_html
 
             # Fix paths
-            gsed -i "s@/../public@/../public_html@" bootstrap/paths.php
+            stringReplace "@" "/../public" "/../public_html" bootstrap/paths.php
 
             PUBLIC_PATH="$WORK_PATH/public_html"
         else
@@ -159,7 +159,7 @@ read -e environment
 if [[ $environment == "y" ]]; then
     # Update hostnames
     hostnames_string=$(printf "'%s', " "${hostnames[@]}")
-    gsed -i "s/'your-machine-name'/${hostnames_string%??}/" bootstrap/start.php
+    stringReplace "/" "'your-machine-name'" "${hostnames_string%??}" bootstrap/start.php
 
     # Make local config folder
     mkdir -p app/config/local
@@ -169,15 +169,15 @@ if [[ $environment == "y" ]]; then
 
     if [[ -e "$PROFILE_PATH/src/app/config/local/session.php" ]]; then
         cp "$PROFILE_PATH/src/app/config/local/session.php" app/config/local/
-        gsed -i "s/'lifetime' => 120/'lifetime' => $session_lifetime/" app/config/local/session.php
+        stringReplace "/" "'lifetime' => 120" "'lifetime' => $session_lifetime" app/config/local/session.php
 
         if [[ "$session_domain" != "null" ]]; then
-            gsed -i "s/'domain' => null/'domain' => '$domain'/" app/config/local/session.php
+            stringReplace "/" "'domain' => null" "'domain' => '$domain'" app/config/local/session.php
         fi
     fi
 
     # Set production debug to false
-    gsed -i "s/'debug' => true/'debug' => false/" app/config/app.php
+    stringReplace "/" "'debug' => true" "'debug' => false" app/config/app.php
 fi
 
 # Create mysql database
@@ -197,9 +197,9 @@ if [[ $mysql_skip == false ]]; then
         sudo mysql -u$mysql_user -p$password -e"CREATE DATABASE $database"
 
         echo Updating database configuration file
-        gsed -i "s/'database' => 'database'/'database' => '$database'/" app/config/database.php
-        gsed -i "s/'password'  => ''/'password'  => '$password'/" app/config/database.php
-        # gsed -i "s/'username'  => 'root'/'username'  => '$username'/" app/config/database.php
+        stringReplace "/" "'database' => 'database'" "'database' => '$database'" app/config/database.php
+        stringReplace "/" "'password'  => ''" "'password'  => '$password'" app/config/database.php
+        # stringReplace "/" "'username'  => 'root'" "'username'  => '$username'" app/config/database.php
     fi
 fi
 
@@ -217,12 +217,12 @@ if [[ "$profile" != "default" ]]; then
         # Session settings
         echo
         echo "Applying settings..."
-        gsed -i "s/'lifetime' => 120/'lifetime' => $session_lifetime/" app/config/session.php
-        gsed -i "s/'cookie' => 'laravel_session'/'cookie' => '${appname}_session'/" app/config/session.php
+        stringReplace "/" "'lifetime' => 120" "'lifetime' => $session_lifetime" app/config/session.php
+        stringReplace "/" "'cookie' => 'laravel_session'" "'cookie' => '${appname}_session'" app/config/session.php
 
         # Workbench settings
-        gsed -i "s/'name' => ''/'name' => '$workbench_author_name'/" app/config/workbench.php
-        gsed -i "s/'email' => ''/'email' => '$workbench_email'/" app/config/workbench.php
+        stringReplace "/" "'name' => ''" "'name' => '$workbench_author_name'" app/config/workbench.php
+        stringReplace "/" "'email' => ''" "'email' => '$workbench_email'" app/config/workbench.php
     fi
 fi
 
@@ -240,7 +240,7 @@ if [[ $custom == "y" ]]; then
 fi
 
 # Cache settings
-gsed -i "s/'prefix' => 'laravel'/'prefix' => '$appname'/" app/config/cache.php
+stringReplace "/" "'prefix' => 'laravel'" "'prefix' => '$appname'" app/config/cache.php
 
 
 #-----------------------------------------------------------------------
