@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * addAlias.php is part of Larascript.
+ *
+ * addAlias will add a Laravel facade alias to a file with an
+ * aliases array. If the alias already exists, it will not be
+ * added again.
+ */
+
+
     /**
      * Argument 1
      * The alias name to be added.

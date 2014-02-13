@@ -6,16 +6,29 @@ cat "$PROFILE_PATH/src/app/start/global.php" >> app/start/global.php
 # content in the profile/src/app/start/global.php file.
 printf "<?php\n\n// View composers" > app/composers.php
 
+# Ignore more stuff
+echo "Adding to .gitignore..."
+addLine "error_log" ".gitignore"
+addLine "localhost_access.log" ".gitignore"
+addLine "localhost_error.log" ".gitignore"
+# addLine "$PUBLIC_DIR/uploads" ".gitignore"
+
 # Add view folders
-echo "Adding view folders..."
-mkdir app/views/layouts
-mkdir app/views/auth
-mkdir app/views/errors
+# echo "Adding view folders..."
+# mkdir app/views/layouts
+# mkdir app/views/auth
+# mkdir app/views/errors
+
+# Add asset folders
+echo "Adding asset folders..."
+mkdir "$PUBLIC_PATH/img"
+mkdir "$PUBLIC_PATH/includes"
 
 # Add asset source folders
-echo "Adding asset source folders..."
-mkdir javascript
-mkdir less
+# echo "Adding asset source folders..."
+# mkdir javascript
+# mkdir less
+# mkdir scss
 
 # Copy library folders
 # echo "Copying library folders..."

@@ -19,7 +19,6 @@ SOURCE_PATH="$( cd "$( echo "${BASH_SOURCE[0]%/*}" )"; pwd )"
 #-----------------------------------------------------------------------
 # START                                                                |
 #-----------------------------------------------------------------------
-
 echo
 echo "Get Started Configuring a New Laravel 4.1 Website"
 echo
@@ -90,6 +89,18 @@ fi
 # DEPLOYMENT CONFIG                                                    |
 #-----------------------------------------------------------------------
 
+# Set public folder.
+if [ -d "public" ]; then
+    PUBLIC_PATH="$WORK_PATH/public"
+    PUBLIC_DIR="/public"
+elif [[ -d "public_html" ]]; then
+    PUBLIC_PATH="$WORK_PATH/public_html"
+    PUBLIC_DIR="/public_html"
+else
+    PUBLIC_PATH="$WORK_PATH"
+    PUBLIC_DIR=""
+fi
+
 # Move public files to root. Shit happens.
 if [ -d "public" ]; then
     echo
@@ -99,14 +110,20 @@ if [ -d "public" ]; then
         # Move files
         cd public; mv * ../; cd ..
 
-        # Cleanup. Should probably be done in .gitignore file instead.
-        rm -rf public; rm readme.md; rm CONTRIBUTING.md
+        # Update path
+        PUBLIC_PATH="$WORK_PATH"
+        PUBLIC_DIR=""
+
+        # Cleanup and add more items to .gitignore since public is root.
+        rm -rf public;
+        addLine "readme.md" ".gitignore"
+        addLine "CONTRIBUTING.md" ".gitignore"
+        addLine "codeception.yml" ".gitignore"
 
         # Fix paths
         stringReplace "@g" "/../bootstrap" "/bootstrap" index.php
         stringReplace "@" "/../public" "/.." bootstrap/paths.php
 
-        PUBLIC_PATH="$WORK_PATH"
     else
         echo
         echo -n "Move public files to public_html folder? (y/n) [n] : "
@@ -115,32 +132,27 @@ if [ -d "public" ]; then
             # Rename public to public_html.
             mv public public_html
 
+            # Update path
+            PUBLIC_PATH="$WORK_PATH/public_html"
+            PUBLIC_DIR="/public_html"
+
             # Fix paths
             stringReplace "@" "/../public" "/../public_html" bootstrap/paths.php
-
-            PUBLIC_PATH="$WORK_PATH/public_html"
         else
             # Default public folder.
             PUBLIC_PATH="$WORK_PATH/public"
+            PUBLIC_DIR="/public"
         fi
     fi
-
-    # Make asset folders
-    mkdir "$PUBLIC_PATH/img"
-    mkdir "$PUBLIC_PATH/includes"
 
     # Copy .htaccess file to public
     if [[ -e "$PROFILE_PATH/src/public/.htaccess" ]]; then
         cp "$PROFILE_PATH/src/public/.htaccess" "$PUBLIC_PATH"
     fi
-else
-    # Set public folder.
-    if [ -d "public" ]; then
-        PUBLIC_PATH="$WORK_PATH/public"
-    elif [[ -d "public_html" ]]; then
-        PUBLIC_PATH="$WORK_PATH/public_html"
-    else
-        PUBLIC_PATH="$WORK_PATH"
+
+    if [[ $PUBLIC_DIR == "" ]]; then
+        # Append to .htaccess file
+        cat "$SOURCE_PATH/src/secure_htaccess" >> .htaccess
     fi
 fi
 

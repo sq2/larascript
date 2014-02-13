@@ -13,6 +13,16 @@ addToComposer () {
     php "$SOURCE_PATH"/helpers/addToJson.php "$1" "${2:-key}" "$WORK_PATH/${3:-composer.json}"
 }
 
+# Usage: addLine "some string" "path/to/file"
+addLine () {
+    php "$SOURCE_PATH"/helpers/addLine.php "$1" "$2"
+}
+
+# Usage: removeLine "some string" "path/to/file"
+removeLine () {
+    php "$SOURCE_PATH"/helpers/removeLine.php "$1" "$2"
+}
+
 # Usage: commandExists composer
 commandExists () {
     type "$1" &> /dev/null

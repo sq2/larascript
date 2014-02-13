@@ -1,0 +1,11 @@
+
+# ------------------------------------------------------------------------------
+# | Secure Laravel                                                             |
+# ------------------------------------------------------------------------------
+
+<IfModule mod_include.c>
+   <FilesMatch "^(artisan|composer.json|composer.lock|phpunit.xml)$">
+      Order allow,deny
+      Deny from all
+   </FilesMatch>
+</IfModule>
