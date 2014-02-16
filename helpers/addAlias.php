@@ -48,7 +48,7 @@
      * Loop over file lines. Quick and dirty.
      */
     foreach ($lines as $line_num => $line) {
-        if (! $in_array && strpos($line, "'aliases' => array") !== false) {
+        if (! $in_array && strpos($line, "'aliases' =>") !== false) {
             $in_array = true;
         }
 
@@ -56,7 +56,7 @@
             break;
         }
 
-        if ($in_array && strpos($line, ')') !== false) {
+        if ($in_array && (strpos($line, ')') !== false || strpos($line, ']') !== false)) {
             $in_array = false;
 
             $output = rtrim($output);

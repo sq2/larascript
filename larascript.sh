@@ -244,7 +244,6 @@ if [[ "$profile" != "default" ]]; then
     read -e settings
     if [[ $settings == "y" ]]; then
         # Session settings
-        echo
         echo "Applying settings..."
 
         # Session settings
@@ -263,9 +262,9 @@ echo -n "Add customizations? (y/n) [n] : "
 read -e custom
 if [[ $custom == "y" ]]; then
     if [[ -e "$PROFILE_PATH/custom.sh" ]]; then
+        echo "Applying customizations..."
         . "$PROFILE_PATH/custom.sh"
     else
-        echo
         echo "SKIPPING: File custom.sh not found in $PROFILE_PATH"
     fi
 fi
@@ -297,7 +296,6 @@ for f in "$SOURCE_PATH"/packages/*.sh "$PROFILE_PATH"/packages/*.sh; do
     fi
 
     if [[ $load_package == "y" ]]; then
-        echo
         echo "Adding $package..."
 
         . "$f"
