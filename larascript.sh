@@ -229,6 +229,8 @@ if [[ "$profile" != "default" ]]; then
         # Session settings
         echo
         echo "Applying settings..."
+
+        # Session settings
         stringReplace "/" "'lifetime' => 120" "'lifetime' => $session_lifetime" app/config/session.php
         stringReplace "/" "'cookie' => 'laravel_session'" "'cookie' => '${appname}_session'" app/config/session.php
 

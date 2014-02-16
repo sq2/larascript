@@ -1,3 +1,8 @@
+#
+# Part of Larascript
+# https://github.com/sq2/larascript
+#
+
 
 # Append to global.php file
 cat "$PROFILE_PATH/src/app/start/global.php" >> app/start/global.php
@@ -20,9 +25,9 @@ addLine "localhost_error.log" ".gitignore"
 # mkdir app/views/errors
 
 # Add asset folders
-echo "Adding asset folders..."
-mkdir "$PUBLIC_PATH/img"
-mkdir "$PUBLIC_PATH/includes"
+# echo "Adding asset folders..."
+# mkdir "$PUBLIC_PATH/img"
+# mkdir "$PUBLIC_PATH/includes"
 
 # Add asset source folders
 # echo "Adding asset source folders..."
