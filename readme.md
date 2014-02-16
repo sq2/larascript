@@ -11,7 +11,7 @@ Larascript offers a quick, customizable way to setup new Laravel 4.1 ([laravel.c
 - Composer is installed globally and added to the PATH. [Get Composer](http://getcomposer.org)
 - PHP cli version 5.4+ is installed and working. [OS X PHP Installer](http://php-osx.liip.ch)
 - gsed is installed. `brew install gnu-sed`
-- _Optional_ - Install laravel.phar globally for much faster installations. Change setting in profile config. [Install laravel.phar](http://laravel.com/docs/installation#install-laravel)
+- _Optional_ - Install laravel.phar globally for much faster installations. [Install laravel.phar](http://laravel.com/docs/installation#install-laravel) Larascript will now ask to install laravel.phar for you.
 - _Optional_ - Local installation of MySql.
 
 

@@ -72,10 +72,27 @@ echo
 echo -n "Create a new Laravel app? (y/n) [n] : "
 read -e laravel
 if [[ $laravel == "y" ]]; then
-    if [[ $laravel_installer == "laravel" ]]; then
-        # Use laravel.phar
-        laravel new $domain
-    else
+    if [[ $laravel_installer != "composer" ]]; then
+        if ! commandExists laravel ; then
+            echo -n "The laravel.phar installer cannot be found. Install it now? (y/n) [n] : "
+            read -e install_laravel_phar
+            if [[ $install_laravel_phar == "y" ]]; then
+                curl -O http://laravel.com/laravel.phar
+                chmod 755 laravel.phar
+                mv laravel.phar /usr/local/bin/laravel
+            fi
+        fi
+
+        if commandExists laravel ; then
+            # Use laravel.phar
+            laravel new $domain
+        else
+            echo "laravel.phar installation failed. Trying composer..."
+            laravel_installer="composer"
+        fi
+    fi
+
+    if [[ $laravel_installer == "composer" ]]; then
         # Use create-project
         composer create-project laravel/laravel $domain --prefer-dist
     fi
