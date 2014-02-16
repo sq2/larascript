@@ -9,10 +9,10 @@
 #
 
 
-# Set the source path
+# Set the source path.
 SOURCE_PATH="$( cd "$( echo "${BASH_SOURCE[0]%/*}" )"; pwd )"
 
-# Include any initializations and functions
+# Include any initializations and functions.
 . "$SOURCE_PATH"/helpers/init.sh
 
 
@@ -67,7 +67,7 @@ echo
 read -p "Local domain name? ["$appname.dev"] : " domain
 domain=${domain:-"$appname.dev"}
 
-# Create new laravel project
+# Create new laravel project.
 echo
 echo -n "Create a new Laravel app? (y/n) [n] : "
 read -e laravel
@@ -84,7 +84,7 @@ if [[ $laravel == "y" ]]; then
         fi
 
         if commandExists laravel ; then
-            # Use laravel.phar
+            # Use laravel.phar.
             laravel new $domain
         else
             echo "laravel.phar installation failed. Trying composer..."
@@ -93,7 +93,7 @@ if [[ $laravel == "y" ]]; then
     fi
 
     if [[ $laravel_installer == "composer" ]]; then
-        # Use create-project
+        # Use composer create-project.
         composer create-project laravel/laravel $domain --prefer-dist
     fi
 
@@ -124,28 +124,32 @@ if [ -d "public" ]; then
     echo -n "Move public files to root for shared hosting? (y/n) [n] : "
     read -e public
     if [[ $public == "y" ]]; then
+        echo "Moving public files to root folder..."
+
         # Move files
         cd public; mv * ../; cd ..
 
-        # Update path
+        # Update path.
         PUBLIC_PATH="$WORK_PATH"
         PUBLIC_DIR=""
 
         # Cleanup and add more items to .gitignore since public is root.
         rm -rf public;
-        addLine "readme.md" ".gitignore"
-        addLine "CONTRIBUTING.md" ".gitignore"
-        addLine "codeception.yml" ".gitignore"
+        addLine "readme.md" .gitignore
+        addLine "CONTRIBUTING.md" .gitignore
+        addLine "codeception.yml" .gitignore
+        addLine "server.php" .gitignore
 
-        # Fix paths
+        # Fix paths.
         stringReplace "@g" "/../bootstrap" "/bootstrap" index.php
         stringReplace "@" "/../public" "/.." bootstrap/paths.php
-
     else
         echo
         echo -n "Move public files to public_html folder? (y/n) [n] : "
         read -e publichtml
         if [[ $publichtml == "y" ]]; then
+            echo "Moving public files to public_html folder..."
+
             # Rename public to public_html.
             mv public public_html
 
@@ -153,22 +157,19 @@ if [ -d "public" ]; then
             PUBLIC_PATH="$WORK_PATH/public_html"
             PUBLIC_DIR="/public_html"
 
-            # Fix paths
+            # Fix paths.
             stringReplace "@" "/../public" "/../public_html" bootstrap/paths.php
-        else
-            # Default public folder.
-            PUBLIC_PATH="$WORK_PATH/public"
-            PUBLIC_DIR="/public"
         fi
     fi
 
-    # Copy .htaccess file to public
+    # Copy .htaccess file to public.
     if [[ -e "$PROFILE_PATH/src/public/.htaccess" ]]; then
         cp "$PROFILE_PATH/src/public/.htaccess" "$PUBLIC_PATH"
     fi
 
+    # For added security, block some files from running when pubic files
+    # have been moved to the root folder.
     if [[ $PUBLIC_DIR == "" ]]; then
-        # Append to .htaccess file
         cat "$SOURCE_PATH/src/secure_htaccess" >> .htaccess
     fi
 fi
@@ -181,19 +182,21 @@ echo "NOTE: Public path is $PUBLIC_PATH"
 # LOCAL                                                                |
 #-----------------------------------------------------------------------
 
-# Create a local environment
+# Create a local environment.
 echo
 echo -n "Set up local environment? (y/n) [n] : "
 read -e environment
 if [[ $environment == "y" ]]; then
+    echo "Configuring local environment..."
+
     # Update hostnames
     hostnames_string=$(printf "'%s', " "${hostnames[@]}")
     stringReplace "/" "'your-machine-name'" "${hostnames_string%??}" bootstrap/start.php
 
-    # Make local config folder
+    # Make local config folder.
     mkdir -p app/config/local
 
-    # Add local config files
+    # Add local config files.
     printf "<?php\n\nreturn array(\n\n\t'debug' => true,\n\n\t'url' => 'http://$domain',\n\n);" > app/config/local/app.php
 
     if [[ -e "$PROFILE_PATH/src/app/config/local/session.php" ]]; then
@@ -205,7 +208,7 @@ if [[ $environment == "y" ]]; then
         fi
     fi
 
-    # Set production debug to false
+    # Set production debug to false.
     stringReplace "/" "'debug' => true" "'debug' => false" app/config/app.php
 fi
 
@@ -227,8 +230,8 @@ if [[ $mysql_skip == false ]]; then
 
         echo Updating database configuration file
         stringReplace "/" "'database' => 'database'" "'database' => '$database'" app/config/database.php
+        stringReplace "/" "'username'  => 'root'" "'username'  => '$mysql_user'" app/config/database.php
         stringReplace "/" "'password'  => ''" "'password'  => '$password'" app/config/database.php
-        # stringReplace "/" "'username'  => 'root'" "'username'  => '$username'" app/config/database.php
     fi
 fi
 
@@ -238,39 +241,35 @@ fi
 #-----------------------------------------------------------------------
 
 # Change Laravel settings.
-if [[ "$profile" != "default" ]]; then
-    echo
-    echo -n "Apply profile configuration settings? (y/n) [n] : "
-    read -e settings
-    if [[ $settings == "y" ]]; then
-        # Session settings
+# Load customizations from selected profile.
+echo
+echo -n "Apply profile customizations and configurations? (y/n) [n] : "
+read -e custom
+if [[ $custom == "y" ]]; then
+    if [[ "$profile" != "default" ]]; then
+        # Session settings.
         echo "Applying settings..."
 
-        # Session settings
+        # Session settings.
         stringReplace "/" "'lifetime' => 120" "'lifetime' => $session_lifetime" app/config/session.php
         stringReplace "/" "'cookie' => 'laravel_session'" "'cookie' => '${appname}_session'" app/config/session.php
 
-        # Workbench settings
+        # Workbench settings.
         stringReplace "/" "'name' => ''" "'name' => '$workbench_author_name'" app/config/workbench.php
         stringReplace "/" "'email' => ''" "'email' => '$workbench_email'" app/config/workbench.php
     fi
-fi
 
-# Load customizations from selected profile.
-echo
-echo -n "Add customizations? (y/n) [n] : "
-read -e custom
-if [[ $custom == "y" ]]; then
     if [[ -e "$PROFILE_PATH/custom.sh" ]]; then
         echo "Applying customizations..."
         . "$PROFILE_PATH/custom.sh"
     else
         echo "SKIPPING: File custom.sh not found in $PROFILE_PATH"
     fi
+
+    # Cache settings.
+    stringReplace "/" "'prefix' => 'laravel'" "'prefix' => '$appname'" app/config/cache.php
 fi
 
-# Cache settings
-stringReplace "/" "'prefix' => 'laravel'" "'prefix' => '$appname'" app/config/cache.php
 
 
 #-----------------------------------------------------------------------
@@ -309,11 +308,12 @@ done
 # FINAL                                                                |
 #-----------------------------------------------------------------------
 
-# Composer update
+# Composer update.
 echo
 echo -n "Run Composer update? (y/n) [n] : "
 read -e composer
 if [[ $composer == "y" ]]; then
+    echo "Running composer update --dev..."
     composer update --dev
 fi
 
