@@ -41,6 +41,7 @@ Then, answer the questions. If you choose to install Laravel, a project folder (
 - Add common files and folders.
 - Public files may be moved to `public_html` or to the root folder (for shared hosting and such), with references automatically updated.
 - A place to add customizations, with some commented out sample code.
+- An optional Apache virtual host can be created, with `/etc/hosts` domain entries.
 
 
 ## Customizations

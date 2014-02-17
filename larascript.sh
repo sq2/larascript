@@ -141,7 +141,7 @@ if [ -d "public" ]; then
         addLine "server.php" .gitignore
 
         # Fix paths.
-        stringReplace "@g" "/../bootstrap" "/bootstrap" index.php
+        stringReplace "@ g" "/../bootstrap" "/bootstrap" index.php
         stringReplace "@" "/../public" "/.." bootstrap/paths.php
     else
         echo
@@ -305,7 +305,7 @@ done
 
 
 #-----------------------------------------------------------------------
-# FINAL                                                                |
+# COMPOSER                                                             |
 #-----------------------------------------------------------------------
 
 # Composer update.
@@ -313,9 +313,72 @@ echo
 echo -n "Run Composer update? (y/n) [n] : "
 read -e composer
 if [[ $composer == "y" ]]; then
+    if [[ $composer_selfupdate == true ]]; then
+        echo "Updating Composer..."
+        composer self-update
+    fi
+
     echo "Running composer update --dev..."
     composer update --dev
 fi
+
+
+#-----------------------------------------------------------------------
+# VIRTUAL HOST                                                         |
+#-----------------------------------------------------------------------
+
+# Create a new virtual host.
+if [[ $vhost_skip == false ]]; then
+    echo
+    echo -n "Create a new virtual host for ${domain}? (y/n) [n] : "
+    read -e vhost
+    if [[ $vhost == "y" ]]; then
+        if [[ $vhost_sudo == true ]]; then
+            vhost_run_sudo="s"
+        else
+            vhost_run_sudo=""
+        fi
+
+        if [[ $vhost_conf_path == *.conf ]]; then
+            echo "Adding to virtual host file..."
+
+            if [[ -e "$vhost_conf_path" ]]; then
+                CONF_PATH="$vhost_conf_path"
+            fi
+        else
+            echo "Creating virtual host file..."
+
+            CONF_PATH="$vhost_conf_path/${domain}.conf"
+
+            if [[ $vhost_sudo == true ]]; then
+                sudo touch "$CONF_PATH"
+            else
+                touch "$CONF_PATH"
+            fi
+        fi
+
+        if [[ -e "$CONF_PATH" ]]; then
+            if [[ $vhost_sudo == true ]]; then
+                sudo cat "$SOURCE_PATH/src/vhost_conf_template" >> "$CONF_PATH"
+            else
+                cat "$SOURCE_PATH/src/vhost_conf_template" >> "$CONF_PATH"
+            fi
+
+            stringReplace "@ g ${vhost_run_sudo}" "/Sites/example.dev" "$WORK_PATH" "$CONF_PATH"
+            stringReplace "@ g ${vhost_run_sudo}" "example.dev" "$domain" "$CONF_PATH"
+            stringReplace "/ ${vhost_run_sudo}" "user@example.com" "$vhost_server_email" "$CONF_PATH"
+
+            # Edit hosts file
+            sudo php "$SOURCE_PATH"/helpers/addLine.php "127.0.0.1 $domain" /etc/hosts
+            sudo php "$SOURCE_PATH"/helpers/addLine.php "127.0.0.1 www.${domain}" /etc/hosts
+
+            sudo apachectl restart
+        else
+            echo "Virtual host not created. Path does not exist: $vhost_conf_path"
+        fi
+    fi
+fi
+
 
 # What else?
 echo
@@ -327,5 +390,4 @@ echo "The following items will need to be handled manually (for now):"
 echo
 echo "Bring in Javascript, CSS and image assets."
 echo "Error handling for missing pages."
-echo "Setup virtual host and local domain. (Coming soon)"
 echo

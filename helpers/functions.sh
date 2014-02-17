@@ -76,9 +76,10 @@ autoloadCheck () {
 }
 
 # Usage: stringReplace "/" "from" "to" "path/file"
-# Usage: stringReplace "@g" "from" "to" "path/file"
+# Usage: stringReplace "@ g s" "from" "to" "path/file"
 # Make sure separator character (first arg) is not found in strings. The g
 # added after the separator will replace 'from' throughout file globally.
+# The s in the first arg is for sudo.
 stringReplace () {
     sep=${1: -1}
     global=""
@@ -87,5 +88,9 @@ stringReplace () {
         global="g"
     fi
 
-    gsed -i "s$sep${2}$sep${3}$sep$global" $4
+    if [[ $1 == *s* ]]; then
+        sudo gsed -i "s$sep${2}$sep${3}$sep$global" $4
+    else
+        gsed -i "s$sep${2}$sep${3}$sep$global" $4
+    fi
 }

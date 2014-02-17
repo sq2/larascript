@@ -1,0 +1,16 @@
+
+# example.dev
+<VirtualHost *:80>
+    DocumentRoot "/Sites/example.dev"
+    ServerAdmin user@example.com
+    ServerName  example.dev
+    ServerAlias www.example.dev
+    ErrorLog "/Sites/example.dev/localhost_error.log"
+    CustomLog "/Sites/example.dev/localhost_access.log" common
+    <directory "/Sites/example.dev">
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride All
+        allow from all
+    </directory>
+    DirectoryIndex index.html index.php
+</VirtualHost>
