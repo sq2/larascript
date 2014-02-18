@@ -120,7 +120,7 @@ Add the `autoload` command within a package file, to avoid being prompted to ins
 
 ## About the Developer
 
-Hello, my name is Matt. I have been programming in one form or another since 1993. My Twitter handle is @codepl. I code a lot and say very little, so I only have ~~seven~~ eight followers. But, they are all awesome.
+Hello, my name is Matt. I have been programming in one form or another since 1993. My Twitter handle is @codepl. I code a lot and say very little, so I only have ~~seven~~ nine followers. But, they are all awesome.
 
 Use Larascript as needed. It was uploaded to Github to help the Laravel community. I'm not looking for any job offers or clients. Nor am I writing any books. If you want to contribute code, make a pull request. If you want to contribute money, don't. Please consider donating to @taylorotwell, Laravel's creator. [Gittip](https://www.gittip.com/taylorotwell/) him for future awesomeness.
 
