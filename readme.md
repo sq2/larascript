@@ -79,7 +79,7 @@ Add the `autoload` command within a package file, to avoid being prompted to ins
 
 ## About the Developer
 
-Hello, my name is Matt. I have been programming in one form or another since 1993. My Twitter handle is @codepl. I code a lot and say very little, so I only have ~~7~~ 8 followers. But, they are all awesome.
+Hello, my name is Matt. I have been programming in one form or another since 1993. My Twitter handle is @codepl. I code a lot and say very little, so I only have ~~seven~~ eight followers. But, they are all awesome.
 
 
 ## Disclaimer / Warranty
