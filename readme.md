@@ -77,11 +77,11 @@ cat "$PROFILE_PATH/src/vendor/clockwork.php" >> app/start/local.php
 Add the `autoload` command within a package file, to avoid being prompted to install the package. Place it on a line by itself, preferably near the top of the file.
 
 
-### About the Developer
+## About the Developer
 
-Hello, my name is Matt. I have been programming in one form or another since 1993. My Twitter handle is @codepl. I code a lot and say very little, so I only have 7 followers. But, they are all awesome.
+Hello, my name is Matt. I have been programming in one form or another since 1993. My Twitter handle is @codepl. I code a lot and say very little, so I only have ~~7~~ 8 followers. But, they are all awesome.
 
 
-### Disclaimer / Warranty
+## Disclaimer / Warranty
 
 This script works well on my Mac workstations. Perhaps you are using a different OS version or have a different configuration. Use at your own risk. There is no warranty. Command line scripts can break your shit. Be careful. :)
