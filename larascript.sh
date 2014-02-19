@@ -19,6 +19,10 @@ SOURCE_PATH="$( cd "$( echo "${BASH_SOURCE[0]%/*}" )"; pwd )"
 #-----------------------------------------------------------------------
 # START                                                                |
 #-----------------------------------------------------------------------
+
+echo
+echo "Larascript is running. Press cmd+z to exit early."
+echo
 echo
 echo "Get Started Configuring a New Laravel 4.1 Website"
 echo
@@ -36,7 +40,7 @@ done
 PS3="Select a profile: "
 select profile in "${profiles[@]}"; do
     if [[ $(containsElement "$profile" "${profiles[@]}"; echo $?) == 1 ]]; then
-        printf "\nInvalid option, try again.\n"; continue;
+        printf "\nInvalid option number, try again.\n"; continue;
     fi
 
     case "$profile" in
@@ -44,7 +48,7 @@ select profile in "${profiles[@]}"; do
     esac
 done
 profile=${profile:-default}
-printf "\n$profile profile selected\n"
+printf "NOTE: '$profile' profile selected\n"
 
 # Set selected profile path
 PROFILE_PATH="$SOURCE_PATH/profiles/$profile"
@@ -57,15 +61,23 @@ fi
 # Load custom profile config file.
 . "$PROFILE_PATH/config.sh"
 
-# App name
+
+# Choose a name for this app. It will be used to replace some Laravel
+# defaults.
 echo
 echo -n "App name? (Perhaps the domain name without the extension) : "
 read appname
+
 
 # Local domain name
 echo
 read -p "Local domain name? ["$appname.dev"] : " domain
 domain=${domain:-"$appname.dev"}
+
+
+#-----------------------------------------------------------------------
+# LARAVEL                                                              |
+#-----------------------------------------------------------------------
 
 # Create new laravel project.
 echo
@@ -133,7 +145,8 @@ if [ -d "public" ]; then
         PUBLIC_PATH="$WORK_PATH"
         PUBLIC_DIR=""
 
-        # Cleanup and add more items to .gitignore since public is root.
+        # Cleanup and add more items to .gitignore since public is root, for
+        # greater security.
         rm -rf public;
         addLine "readme.md" .gitignore
         addLine "CONTRIBUTING.md" .gitignore
@@ -174,7 +187,6 @@ if [ -d "public" ]; then
     fi
 fi
 
-echo
 echo "NOTE: Public path is $PUBLIC_PATH"
 
 
