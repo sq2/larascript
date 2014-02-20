@@ -21,7 +21,7 @@ SOURCE_PATH="$( cd "$( echo "${BASH_SOURCE[0]%/*}" )"; pwd )"
 #-----------------------------------------------------------------------
 
 echo
-echo "Larascript is running. Press cmd+z to exit early."
+echo "Larascript is running. Press ctrl+z to exit early."
 echo
 echo
 echo "Get Started Configuring a New Laravel 4.1 Website"
@@ -299,15 +299,20 @@ for f in "$SOURCE_PATH"/packages/*.sh "$PROFILE_PATH"/packages/*.sh; do
     package=${filename%.*}
     package=$(echo $package | tr "_" " ")
 
-    if [[ $(autoloadCheck "$f"; echo $?) != 0 ]]; then
-        echo -n "Add $package package? (y/n) [n] : "
+    package_check=$(packageCheck "$f"; echo $?)
+    if [[ $package_check == 2 ]]; then
+        load_text="Loading"
+        echo -n "Load $package package? (y/n) [n] : "
         read -e load_package
-    else
+    elif [[ $package_check == 0 ]]; then
+        load_text="Autoloading"
         load_package="y"
+    else
+        continue
     fi
 
     if [[ $load_package == "y" ]]; then
-        echo "Adding $package..."
+        echo "$load_text $package package..."
 
         . "$f"
     fi

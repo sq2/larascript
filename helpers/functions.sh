@@ -63,16 +63,31 @@ autoload () {
     return 0
 }
 
-# Test if file should be autoloaded.
-# Usage: autoloadCheck "path/to/file"
-autoloadCheck () {
+# Make disabled command available.
+disabled () {
+    return 0
+}
+
+# Test if package should be loaded.
+# Usage: packageCheck "path/to/package"
+packageCheck () {
+    local autoload=false
+
     while read -r line; do
+        if [[ "$line" == "disabled" ]]; then
+            return 1
+        fi
+
         if [[ "$line" == "autoload" ]]; then
-            return 0
+            autoload=true
         fi
     done < "$1"
 
-    return 1
+    if [[ $autoload == true ]]; then
+        return 0
+    fi
+
+    return 2
 }
 
 # Usage: stringReplace "/" "from" "to" "path/file"

@@ -4,10 +4,10 @@ Larascript offers a quick, customizable way to setup new Laravel 4.1 ([laravel.c
 
 So, why not use Vagrant? You could. My reasons for developing locally are as follows:
 
-- My server environment doesn't change much. I setup everything on my mac and don't have to change it for a long while. Only had to change 3 lines in the Apache configuration file after upgrading to Mavericks.
-- During the weekends, I work from home with a different Mac workstation. Working locally makes backup/restore easier. The Vagrant VM's could be saved to an external drive, but it is all or nothing. Not really interested in large backups, when only a few files were changed.
+- My server environment doesn't change much. I setup everything on my mac and don't have to change it for a long while. Only had to change 3 lines in the Apache configuration file after upgrading to Mavericks. PHP and MySql continued to work.
+- During the weekends, I work from home on a different Mac workstation. Working locally makes backup/restore easier. The Vagrant VM's could be saved to an external drive, but it is all or nothing. Not really interested in large backups, when only a few files were changed.
 - There are many projects that I work with that have databases. It's nice to be able to access them directly. Also, the actual original DB files are backed up with the my files. This means that no extra MySql setup at home.
-- After looking into it, Vagrant won't save me any time. Currently, my system works great. I don't need the latest hotness, just because.
+- After looking into it, Vagrant won't save me any time. Currently, my system works great. I don't need the latest hotness, just because. Will reevaluate if needs change.
 - Switching between many projects as quickly as possible is important to me.
 - I work alone.
 - It's okay to use my Mac computers this way, and it's okay for you too. (Just in case someone tells you otherwise. #Therapy)
@@ -92,6 +92,21 @@ Then, answer the questions. If you choose to install Laravel, a project folder (
 
 Just duplicate the `profiles/default` folder and name it. This will be your new profile. Customize `config.sh` and `custom.sh` files to meet your needs.
 
+### Common configurations
+
+Modify `profiles/your_custom_profile/config.sh` file. This file contains variables that can be modified to change Larascript's work flow. There are also some MySql, Virtual Host and Laravel specific settings.
+
+Modify `profiles/your_custom_profile/custom.sh` file. Add any general customizations that are needed. There are examples for common tasks, like the following:
+
+- Adding content or a single line to a file
+- Creating files and folders
+- Copying files and folders from your profile's src folder
+- Adding aliases and service providers
+- Adding PSR-0 and PSR-4 pairs to composer.json
+- Adding to the classmap in composer.json
+
+To be prompted to load smaller groups of commands, add a custom package.
+
 ### Packages
 
 Packages can be used to save and load a group of commands, in a modular way. For each package, Larascript will ask you if you want to load it, unless autoload is enabled. Packages can be available globally by placing them in the `packages` folder, or per profile by placing them in the `profiles/profile_name/packages` folder. Packages bundled with Larascript are located under `profiles/default/packages`. For example, one of the included packages is Clockwork. The filename is `Clockwork_dev.sh`. There are a few commands in this file that Larascript will use to configure this package.
@@ -115,7 +130,11 @@ cat "$PROFILE_PATH/src/vendor/clockwork.php" >> app/start/local.php
 
 #### Autoloading Packages
 
-Add the `autoload` command within a package file, to avoid being prompted to install the package. Place it on a line by itself, preferably near the top of the file.
+Add the `autoload` command within a package file, to avoid being prompted to load that package. Place it on a line by itself, preferably near the top of the file.
+
+#### Disabling Packages
+
+Add the `disabled` command within a package file, to skip the prompting and loading of that package. Place it on a line by itself, preferably near the top of the file.
 
 
 ## About the Developer
