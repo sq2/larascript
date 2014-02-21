@@ -134,7 +134,7 @@ Add the `autoload` command within a package file, to avoid being prompted to loa
 
 #### Disabling Packages
 
-Add the `disabled` command within a package file, to skip the prompting and loading of that package. Place it on a line by itself, preferably near the top of the file.
+Add the `disabled` command within a package file, to skip the prompting and loading of that package. Place it on a line by itself, preferably near the top of the file. Note that when used in combination with the `autoload` command, that package will still not load.
 
 
 ## About the Developer
