@@ -89,6 +89,7 @@ if [[ $laravel == "y" ]]; then
             echo -n "The laravel.phar installer cannot be found. Install it now? (y/n) [n] : "
             read -e install_laravel_phar
             if [[ $install_laravel_phar == "y" ]]; then
+                echo "Installing laravel.phar..."
                 curl -O http://laravel.com/laravel.phar
                 chmod 755 laravel.phar
                 mv laravel.phar /usr/local/bin/laravel
@@ -99,13 +100,14 @@ if [[ $laravel == "y" ]]; then
             # Use laravel.phar.
             laravel new $domain
         else
-            echo "laravel.phar installation failed. Trying composer..."
+            echo "Installation of laravel.phar failed. Trying composer..."
             laravel_installer="composer"
         fi
     fi
 
     if [[ $laravel_installer == "composer" ]]; then
         # Use composer create-project.
+        echo "Creating Laravel project using Composer..."
         composer create-project laravel/laravel $domain --prefer-dist
     fi
 
@@ -157,7 +159,6 @@ if [ -d "public" ]; then
         stringReplace "@ g" "/../bootstrap" "/bootstrap" index.php
         stringReplace "@" "/../public" "/.." bootstrap/paths.php
     else
-        echo
         echo -n "Move public files to public_html folder? (y/n) [n] : "
         read -e publichtml
         if [[ $publichtml == "y" ]]; then
@@ -177,6 +178,7 @@ if [ -d "public" ]; then
 
     # Copy .htaccess file to public.
     if [[ -e "$PROFILE_PATH/src/public/.htaccess" ]]; then
+        echo "Copying .htaccess file to public folder..."
         cp "$PROFILE_PATH/src/public/.htaccess" "$PUBLIC_PATH"
     fi
 
@@ -347,23 +349,21 @@ fi
 # Create a new virtual host.
 if [[ $vhost_skip == false ]]; then
     echo
-    echo -n "Create a new virtual host for ${domain}? (y/n) [n] : "
+    echo -n "Create a new Apache virtual host for ${domain}? (y/n) [n] : "
     read -e vhost
     if [[ $vhost == "y" ]]; then
-        if [[ $vhost_sudo == true ]]; then
-            vhost_run_sudo="s"
-        else
-            vhost_run_sudo=""
-        fi
+        # Ignore these log files created by Apache.
+        addLine "localhost_access.log" .gitignore
+        addLine "localhost_error.log" .gitignore
 
         if [[ $vhost_conf_path == *.conf ]]; then
-            echo "Adding to virtual host file..."
+            echo "Adding ${domain} to virtual host file..."
 
             if [[ -e "$vhost_conf_path" ]]; then
                 CONF_PATH="$vhost_conf_path"
             fi
         else
-            echo "Creating virtual host file..."
+            echo "Creating ${domain} virtual host file..."
 
             CONF_PATH="$vhost_conf_path/${domain}.conf"
 
@@ -376,8 +376,10 @@ if [[ $vhost_skip == false ]]; then
 
         if [[ -e "$CONF_PATH" ]]; then
             if [[ $vhost_sudo == true ]]; then
+                vhost_run_sudo="s"
                 sudo cat "$SOURCE_PATH/src/vhost_conf_template" >> "$CONF_PATH"
             else
+                vhost_run_sudo=""
                 cat "$SOURCE_PATH/src/vhost_conf_template" >> "$CONF_PATH"
             fi
 
@@ -386,6 +388,7 @@ if [[ $vhost_skip == false ]]; then
             stringReplace "/ ${vhost_run_sudo}" "user@example.com" "$vhost_server_email" "$CONF_PATH"
 
             # Edit hosts file
+            echo "Updating hosts file..."
             sudo php "$SOURCE_PATH"/helpers/addLine.php "127.0.0.1 $domain" /etc/hosts
             sudo php "$SOURCE_PATH"/helpers/addLine.php "127.0.0.1 www.${domain}" /etc/hosts
 
