@@ -17,19 +17,17 @@ Someone out there can probably argue each of my points, in favor of their proces
 
 ## Features
 
-- A step-by-step interactive Laravel setup process. It asks you questions.
-- Setup multiple, customizable profiles for different Laravel configurations.
-- Changes settings for you automatically during setup.
-- Local environment setup with hostname detection. Production debug is set to false.
-- Package configuration files may be added. During the Laravel installation, each will ask if it should be installed, unless autoload is enabled.
-- Bower packages may be easily added to your projects. This feature requires that Bower be installed first.
-- Easy functions for adding service providers and aliases for packages and custom code.
-- Simple functions for adding psr-0, psr-4 and items to the classmap array, in composer.json.
-- Optional MySql database configuration, if MySql is installed.
-- Add common files and folders.
-- Public files may be moved to `public_html` or to the root folder (for shared hosting and such), with references automatically updated.
-- A place to add customizations, with some commented out sample code.
-- An optional Apache virtual host can be created, with `/etc/hosts` domain entries.
+- **Interactive** - A step-by-step Laravel setup process. It asks you questions.
+- **Profiles** - Create multiple, customizable profiles for different Laravel configurations.
+- **Settings** - Changes Laravel settings for you automatically during setup, based on profile settings.
+- **Customizations** - A place to store general custom commands. The sample code gives examples of creating files and folders and much more.
+- **Local Environment** - Creates a development environment with automatic hostname detection among other features. Also, the production environment debug is disabled, for security reasons.
+- **Public** - *Optionally* move `public` files to `public_html` or to the root folder (for shared hosting and such), with Laravel references automatically updated.
+- **Packages** - Add logical groups of commands, for custom configurations. During the Laravel installation, each package will ask if it should be installed, unless autoload is enabled.
+- **Bower Support** - Bower packages may be easily added to your projects. This *optional* feature requires [Bower](http://bower.io) to be installed.
+- **Functions** - Easy to use Bash functions for adding service providers and aliases, for packages and custom code. Addition functions for adding psr-0, psr-4 and items to the classmap array, in composer.json.
+- **MySql** - Create new MySql databases and configure Laravel to use them. This *optional* feature requires [MySql](http://dev.mysql.com/downloads/mysql/) to be installed.
+- **Virtual Host** - An *optional* Apache virtual host can be created, with `/etc/hosts` domain entries.
 
 
 ## Installation and Usage
@@ -39,9 +37,10 @@ Someone out there can probably argue each of my points, in favor of their proces
 - Familiar with Mac/Linux command line.
 - Composer is installed globally and added to the PATH. [Get Composer](http://getcomposer.org)
 - PHP cli version 5.4+ is installed and working. [OS X PHP Installer](http://php-osx.liip.ch)
-- gsed is installed. `brew install gnu-sed`
-- _Optional_ - Install laravel.phar globally for much faster installations. [Install laravel.phar](http://laravel.com/docs/installation#install-laravel) Larascript will now ask to install laravel.phar for you.
+- Gsed is installed. `brew install gnu-sed`
+- _Optional_ - Install laravel.phar globally for much faster installations. [Install laravel.phar](http://laravel.com/docs/installation#install-laravel). Larascript will now prompt to install laravel.phar.
 - _Optional_ - Local installation of MySql.
+- _Optional_ - Local installation of Bower.
 
 ### Install Larascript
 
@@ -137,7 +136,7 @@ Add the `autoload` command within a package file, to avoid being prompted to loa
 
 #### Disabling Packages
 
-Add the `disabled` command within a package file, to skip the prompting and loading of that package. Place it on a line by itself, preferably near the top of the file. Note that when used in combination with the `autoload` command, that package will still not load.
+Add the `disabled` command within a package file, to skip the prompting and loading of that package. Place it on a line by itself, preferably near the top of the file. Note that when used in combination with the `autoload` command, that package will not be loaded.
 
 
 ## About the Developer
