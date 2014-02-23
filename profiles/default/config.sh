@@ -70,6 +70,20 @@ mysql_user="root"
 
 
 #-----------------------------------------------------------------------
+# BOWER                                                                |
+#-----------------------------------------------------------------------
+
+# Bower is a front-end package manager.
+
+# Set to true to skip the prompt and not install any Bower packages.
+bower_skip=false
+
+# The name of the folder to store Bower components.
+# Default: bower_components
+bower_folder="bower_components"
+
+
+#-----------------------------------------------------------------------
 # VIRTUAL HOST                                                         |
 #-----------------------------------------------------------------------
 

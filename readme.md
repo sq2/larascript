@@ -4,26 +4,25 @@ Larascript offers a quick, customizable way to setup new Laravel 4.1 ([laravel.c
 
 So, why not use Vagrant? You could. My reasons for developing locally are as follows:
 
-- My server environment doesn't change much. I setup everything on my mac and don't have to change it for a long while. Only had to change 3 lines in the Apache configuration file after upgrading to Mavericks. PHP and MySql continued to work.
+- My server environment doesn't change much. Similar environments are setup on my Macs that don't have to change for a long while. Only three lines had to be changed in Apache's configuration file after upgrading to Mavericks. PHP and MySql continued to work.
 - During the weekends, I work from home on a different Mac workstation. Working locally makes backup/restore easier. The Vagrant VM's could be saved to an external drive, but it is all or nothing. Not really interested in large backups, when only a few files were changed.
-- There are many projects that I work with that have databases. It's nice to be able to access them directly. Also, the actual original DB files are backed up with the my files. This means that no extra MySql setup at home.
-- After looking into it, Vagrant won't save me any time. Currently, my system works great. I don't need the latest hotness, just because. Will reevaluate if needs change.
+- Many of my projects have databases. It's nice to be able to access them directly. Also, the original DB files are backed up with the my other files. This means there's no extra MySql setup at home.
+- After looking into it, Vagrant won't save me any time. Currently, my system works great. No need for the latest hotness, just because. Will evaluate again when needs change.
 - Switching between many projects as quickly as possible is important to me.
 - I work alone.
 - It's okay to use my Mac computers this way, and it's okay for you too. (Just in case someone tells you otherwise. #Therapy)
 
 Someone out there can probably argue each of my points, in favor of their process. After investigating other ways, my process works best for me. Ultimately, use whatever makes your life easier. I like working locally. It was taking me quite a while to setup new Laravel projects how I liked them. Then came Larascript, problem solved. If you like the Vagrant way, check out [Vaprobash](https://github.com/fideloper/Vaprobash).
 
-> **Note:** This script is a functional work in progress.
-
 
 ## Features
 
 - A step-by-step interactive Laravel setup process. It asks you questions.
-- Setup multiple profiles for different Laravel configurations.
-- Changes settings automatically during setup.
+- Setup multiple, customizable profiles for different Laravel configurations.
+- Changes settings for you automatically during setup.
 - Local environment setup with hostname detection. Production debug is set to false.
 - Package configuration files may be added. During the Laravel installation, each will ask if it should be installed, unless autoload is enabled.
+- Bower packages may be easily added to your projects. This feature requires that Bower be installed first.
 - Easy functions for adding service providers and aliases for packages and custom code.
 - Simple functions for adding psr-0, psr-4 and items to the classmap array, in composer.json.
 - Optional MySql database configuration, if MySql is installed.
@@ -102,14 +101,14 @@ Modify `profiles/your_custom_profile/custom.sh` file. Add any general customizat
 - Creating files and folders
 - Copying files and folders from your profile's src folder
 - Adding aliases and service providers
-- Adding PSR-0 and PSR-4 pairs to composer.json
+- Adding PSR-0 and PSR-4 key/value pairs to composer.json
 - Adding to the classmap in composer.json
 
 To be prompted to load smaller groups of commands, add a custom package.
 
 ### Packages
 
-Packages can be used to save and load a group of commands, in a modular way. For each package, Larascript will ask you if you want to load it, unless autoload is enabled. Packages can be available globally by placing them in the `packages` folder, or per profile by placing them in the `profiles/profile_name/packages` folder. Packages bundled with Larascript are located under `profiles/default/packages`. For example, one of the included packages is Clockwork. The filename is `Clockwork_dev.sh`. There are a few commands in this file that Larascript will use to configure this package.
+Packages can be used to save and load groups of commands, in a modular way. For each package, Larascript will ask you if you want to load it, unless autoloaded or disabled. Packages can be available globally by placing them in the `packages` folder, or per profile by placing them in the `profiles/profile_name/packages` folder. Packages bundled with Larascript are located under `profiles/default/packages`. For example, one of the included packages is Clockwork. The filename is `Clockwork_dev.sh`. There are a few commands in this file that Larascript will use to configure this package.
 
 ```shell
 # Composer command to add this package to the composer.json file as a require-dev item.
@@ -127,6 +126,10 @@ addAlias "Clockwork" "Clockwork\Support\Laravel\Facade"
 # the path to the currently selected customization profile.
 cat "$PROFILE_PATH/src/vendor/clockwork.php" >> app/start/local.php
 ```
+
+### Bower
+
+Bower is a front-end package manager that loads Javascript, CSS and other assets. Packages for Bower act similar to the above packages. Place Bower and other Bash commands in `.sh` files. They may be saved in one of two places. Globally, they can be saved to `packages/bower`, or on a per profile basis to `profiles/profile_name/packages/bower`. See the examples for more details.
 
 #### Autoloading Packages
 

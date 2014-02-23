@@ -285,13 +285,13 @@ if [[ $custom == "y" ]]; then
 fi
 
 
-
 #-----------------------------------------------------------------------
 # PACKAGES                                                             |
 #-----------------------------------------------------------------------
 
 # Load packages.
 echo
+echo "Loading packages..."
 for f in "$SOURCE_PATH"/packages/*.sh "$PROFILE_PATH"/packages/*.sh; do
     [[ -e "$f" ]] || continue
 
@@ -318,9 +318,60 @@ for f in "$SOURCE_PATH"/packages/*.sh "$PROFILE_PATH"/packages/*.sh; do
 
         . "$f"
     fi
-
-    echo
 done
+
+
+#-----------------------------------------------------------------------
+# BOWER                                                                |
+#-----------------------------------------------------------------------
+
+# Load Bower packages.
+if [[ $bower_skip == false ]]; then
+    echo
+    echo "Loading Bower packages..."
+
+    if ! commandExists bower ; then
+        echo "SKIPPING: Bower not installed."
+    else
+        # Update Bower components folder.
+        BOWER_PATH="${PUBLIC_DIR}/${bower_folder}"
+        BOWER_PATH="${BOWER_PATH#/}"
+        if [[ -e ".bowerrc" ]]; then
+            php "$SOURCE_PATH/helpers/addToJson.php" "@directory@${BOWER_PATH}" key .bowerrc
+        else
+            cp "$SOURCE_PATH/src/bowerrc_template" .bowerrc
+            stringReplace "@" "public/bower_components" "$BOWER_PATH" .bowerrc
+        fi
+
+        for f in "$SOURCE_PATH"/packages/bower/*.sh "$PROFILE_PATH"/packages/bower/*.sh; do
+            [[ -e "$f" ]] || continue
+
+            cd $WORK_PATH
+
+            filename=$(basename $f)
+            package=${filename%.*}
+            package=$(echo $package | tr "_" " ")
+
+            package_check=$(packageCheck "$f"; echo $?)
+            if [[ $package_check == 2 ]]; then
+                load_text="Loading"
+                echo -n "Load $package Bower package? (y/n) [n] : "
+                read -e load_package
+            elif [[ $package_check == 0 ]]; then
+                load_text="Autoloading"
+                load_package="y"
+            else
+                continue
+            fi
+
+            if [[ $load_package == "y" ]]; then
+                echo "$load_text $package Bower package..."
+
+                . "$f"
+            fi
+        done
+    fi
+fi
 
 
 #-----------------------------------------------------------------------
@@ -400,6 +451,10 @@ if [[ $vhost_skip == false ]]; then
 fi
 
 
+#-----------------------------------------------------------------------
+# DONE                                                                 |
+#-----------------------------------------------------------------------
+
 # What else?
 echo
 echo "----------------------------------------------------------------"
@@ -408,6 +463,6 @@ echo "----------------------------------------------------------------"
 echo
 echo "The following items will need to be handled manually (for now):"
 echo
-echo "Bring in Javascript, CSS and image assets."
+echo "Add custom Javascript, CSS and image assets."
 echo "Error handling for missing pages."
 echo
