@@ -286,42 +286,6 @@ fi
 
 
 #-----------------------------------------------------------------------
-# PACKAGES                                                             |
-#-----------------------------------------------------------------------
-
-# Load packages.
-echo
-echo "Loading packages..."
-for f in "$SOURCE_PATH"/packages/*.sh "$PROFILE_PATH"/packages/*.sh; do
-    [[ -e "$f" ]] || continue
-
-    cd $WORK_PATH
-
-    filename=$(basename $f)
-    package=${filename%.*}
-    package=$(echo $package | tr "_" " ")
-
-    package_check=$(packageCheck "$f"; echo $?)
-    if [[ $package_check == 2 ]]; then
-        load_text="Loading"
-        echo -n "Load $package package? (y/n) [n] : "
-        read -e load_package
-    elif [[ $package_check == 0 ]]; then
-        load_text="Autoloading"
-        load_package="y"
-    else
-        continue
-    fi
-
-    if [[ $load_package == "y" ]]; then
-        echo "$load_text $package package..."
-
-        . "$f"
-    fi
-done
-
-
-#-----------------------------------------------------------------------
 # BOWER                                                                |
 #-----------------------------------------------------------------------
 
@@ -372,6 +336,42 @@ if [[ $bower_skip == false ]]; then
         done
     fi
 fi
+
+
+#-----------------------------------------------------------------------
+# PACKAGES                                                             |
+#-----------------------------------------------------------------------
+
+# Load packages.
+echo
+echo "Loading packages..."
+for f in "$SOURCE_PATH"/packages/*.sh "$PROFILE_PATH"/packages/*.sh; do
+    [[ -e "$f" ]] || continue
+
+    cd $WORK_PATH
+
+    filename=$(basename $f)
+    package=${filename%.*}
+    package=$(echo $package | tr "_" " ")
+
+    package_check=$(packageCheck "$f"; echo $?)
+    if [[ $package_check == 2 ]]; then
+        load_text="Loading"
+        echo -n "Load $package package? (y/n) [n] : "
+        read -e load_package
+    elif [[ $package_check == 0 ]]; then
+        load_text="Autoloading"
+        load_package="y"
+    else
+        continue
+    fi
+
+    if [[ $load_package == "y" ]]; then
+        echo "$load_text $package package..."
+
+        . "$f"
+    fi
+done
 
 
 #-----------------------------------------------------------------------
