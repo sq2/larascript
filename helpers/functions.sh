@@ -1,3 +1,15 @@
+# Usage: relPath from_path to_path
+# Get result from $LAST_REL_PATH
+relPath () {
+    local common path up
+    common=${1%/} path=${2%/}/
+    while test "${path#"$common"/}" = "$path"; do
+        common=${common%/*} up=../$up
+    done
+    path=$up${path#"$common"/}; path=${path%/};
+    printf -v LAST_REL_PATH %s "${path:-.}"
+}
+
 # Usage: addServiceProvider "Namespace\To\ServiceProvider"
 addServiceProvider () {
     php "$SOURCE_PATH"/helpers/addServiceProvider.php "$1" "$WORK_PATH/${2:-app/config/app.php}"
