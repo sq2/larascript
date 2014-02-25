@@ -298,13 +298,14 @@ if [[ $bower_skip == false ]]; then
         echo "SKIPPING: Bower not installed."
     else
         # Update Bower components folder.
-        BOWER_PATH="${PUBLIC_DIR}/${bower_folder}"
-        BOWER_PATH="${BOWER_PATH#/}"
+        BOWER_DIR="${PUBLIC_DIR}/${bower_folder}"
+        BOWER_DIR="${BOWER_DIR#/}"
+        BOWER_PATH="${PUBLIC_PATH}/${bower_folder}"
         if [[ -e ".bowerrc" ]]; then
-            php "$SOURCE_PATH/helpers/addToJson.php" "@directory@${BOWER_PATH}" key .bowerrc
+            php "$SOURCE_PATH/helpers/addToJson.php" "@directory@${BOWER_DIR}" key .bowerrc
         else
             cp "$SOURCE_PATH/src/bowerrc_template" .bowerrc
-            stringReplace "@" "public/bower_components" "$BOWER_PATH" .bowerrc
+            stringReplace "@" "public/bower_components" "$BOWER_DIR" .bowerrc
         fi
 
         for f in "$SOURCE_PATH"/packages/bower/*.sh "$PROFILE_PATH"/packages/bower/*.sh; do
