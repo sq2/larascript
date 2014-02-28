@@ -9,6 +9,10 @@
 #
 
 
+echo
+echo "Larascript is running. Press ctrl+z to exit early."
+echo
+
 # Set the source path.
 SOURCE_PATH="$( cd "$( echo "${BASH_SOURCE[0]%/*}" )"; pwd )"
 
@@ -20,9 +24,6 @@ SOURCE_PATH="$( cd "$( echo "${BASH_SOURCE[0]%/*}" )"; pwd )"
 # START                                                                |
 #-----------------------------------------------------------------------
 
-echo
-echo "Larascript is running. Press ctrl+z to exit early."
-echo
 echo
 echo "Get Started Configuring a New Laravel 4.1 Website"
 echo
