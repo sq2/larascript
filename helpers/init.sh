@@ -11,7 +11,7 @@ hostname=$(hostname)
 commandCheck gsed
 commandCheck php
 
-if ! commandExists "composer" ; then
+if ! commandExists "composer2" ; then
     echo
     echo -n "Can't find Composer. Install now? (y/n) [n] : "
     read -e install_composer
@@ -19,8 +19,9 @@ if ! commandExists "composer" ; then
         echo "Installing Composer..."
         curl -sS https://getcomposer.org/installer | php
         chmod 755 composer.phar
-        mv composer.phar /usr/local/bin/composer
+        sudo mv composer.phar /usr/local/bin/composer2
+        sudo chown $USER /usr/local/bin/composer2
     fi
 fi
 
-commandCheck composer
+commandCheck composer2
