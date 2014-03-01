@@ -109,7 +109,7 @@ vhost_sudo=true
 
 
 #-----------------------------------------------------------------------
-# Checklist                                                            |
+# CHECKLIST                                                            |
 #-----------------------------------------------------------------------
 
 # A basic checklist can be presented when Larascript completes its process.

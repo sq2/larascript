@@ -122,6 +122,11 @@ stringReplace () {
     fi
 }
 
+# Usage: runAfterComposer "command to run"
+runAfterComposer () {
+    RUN_AFTER_COMPOSER+=("$1")
+}
+
 # Usage: addChecklistItem "Something to do."
 addChecklistItem () {
     CHECKLIST_ITEMS+=("$1")

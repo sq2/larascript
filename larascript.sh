@@ -394,6 +394,16 @@ if [[ $composer == "y" ]]; then
 
     echo "Running composer update --dev..."
     composer update --dev
+
+    # Run commands after Composer update.
+    if [[ "$RUN_AFTER_COMPOSER" ]]; then
+        echo
+        echo "Running commands after Composer update..."
+
+        for item in "${RUN_AFTER_COMPOSER[@]}" ; do
+            echo $($item)
+        done
+    fi
 fi
 
 

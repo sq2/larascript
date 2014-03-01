@@ -26,5 +26,8 @@ fi
 
 commandCheck composer
 
+# Define a variable to store commands to run after Composer update.
+RUN_AFTER_COMPOSER=()
+
 # Define a variable to store the checklist items.
 CHECKLIST_ITEMS=()
