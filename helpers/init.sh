@@ -25,3 +25,6 @@ if ! commandExists "composer" ; then
 fi
 
 commandCheck composer
+
+# Define a variable to store the checklist items.
+CHECKLIST_ITEMS=()

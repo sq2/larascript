@@ -57,6 +57,8 @@ PROFILE_PATH="$SOURCE_PATH/profiles/$profile"
 # Load default profile config so custom profile config can override defaults.
 if [[ "$profile" != "default" ]]; then
     . "$SOURCE_PATH/profiles/default/config.sh"
+
+    CHECKLIST_ITEMS=()
 fi
 
 # Load custom profile config file.
@@ -462,9 +464,5 @@ echo
 echo "----------------------------------------------------------------"
 echo "Larascript Setup Complete"
 echo "----------------------------------------------------------------"
-echo
-echo "The following items will need to be handled manually (for now):"
-echo
-echo "Add custom Javascript, CSS and image assets."
-echo "Error handling for missing pages."
+showChecklist
 echo

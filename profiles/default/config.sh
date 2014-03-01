@@ -106,3 +106,14 @@ vhost_conf_path="/private/etc/apache2/extra"
 # Is super user authentication needed to access the above path?
 # true for yes, false for no.
 vhost_sudo=true
+
+
+#-----------------------------------------------------------------------
+# Checklist                                                            |
+#-----------------------------------------------------------------------
+
+# A basic checklist can be presented when Larascript completes its process.
+# Use this list as a reminder of additional tasks that need attention.
+
+addChecklistItem "Add custom Javascript, CSS and image assets."
+addChecklistItem "Error handling for missing pages."
