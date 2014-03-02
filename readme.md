@@ -63,9 +63,14 @@ rm master.zip
 mv larascript-master larascript
 ```
 
+Optionally add a symbolic link for easy access.
+```shell
+ln -s /Sites/larascript/larascript.sh /usr/local/bin/larascript
+```
+
 ### Profiles
 
-Create a profile by duplicating the default profile. This will allow you to customize Larascipt without overwriting your changes, when updating Larascript.
+Create a profile by duplicating the default profile. This will allow you to customize Larascript without overwriting your changes, when updating Larascript.
 ```shell
 # Many profiles can be created. Name them as you wish, without spaces. In this case, we will use 'custom'.
 cp -R /Sites/larascript/profiles/default /Sites/larascript/profiles/custom

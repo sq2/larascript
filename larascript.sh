@@ -14,7 +14,10 @@ echo "Larascript is running. Press ctrl+z to exit early."
 echo
 
 # Set the source path.
-SOURCE_PATH="$( cd "$( echo "${BASH_SOURCE[0]%/*}" )"; pwd )"
+SOURCE_PATH="$(dirname "$(readlink "$0")")"
+if [[ ! -e "$SOURCE_PATH/larascript.sh" ]]; then
+    SOURCE_PATH="$( cd "$( echo "${BASH_SOURCE[0]%/*}" )"; pwd )"
+fi
 
 # Include any initializations and functions.
 . "$SOURCE_PATH"/helpers/init.sh
@@ -431,6 +434,11 @@ if [[ $vhost_skip == false ]]; then
             echo "Creating ${domain} virtual host file..."
 
             CONF_PATH="$vhost_conf_path/${domain}.conf"
+
+            # Remove conf file if exists.
+            if [[ -e "$CONF_PATH" ]]
+                rm "$CONF_PATH"
+            fi
 
             if [[ $vhost_sudo == true ]]; then
                 sudo touch "$CONF_PATH"
