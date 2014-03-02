@@ -220,7 +220,7 @@ if [[ $environment == "y" ]]; then
     printf "<?php\n\nreturn array(\n\n\t'debug' => true,\n\n\t'url' => 'http://$domain',\n\n);" > app/config/local/app.php
 
     if [[ -e "$PROFILE_PATH/src/app/config/local/session.php" ]]; then
-        cp "$PROFILE_PATH/src/app/config/local/session.php" app/config/local/
+        copyFile "app/config/local/session.php" app/config/local/
         stringReplace "/" "'lifetime' => 120" "'lifetime' => $session_lifetime" app/config/local/session.php
 
         if [[ "$session_domain" != "null" ]]; then

@@ -61,18 +61,54 @@ relPath () {
     printf -v LAST_REL_PATH %s "${path:-.}"
 }
 
+# If the optional second parameter is 'public', the public path will be
+# prepended to the folder path.
 # Usage: createFolder "path/to/folder"
 createFolder () {
+    if [[ $2 == 'public' ]]; then
+        local public="$PUBLIC_PATH/"
+    fi
+
     if [[ ! -e "$1" ]]; then
-        mkdir "$1"
+        mkdir "$public$1"
     fi
 }
 
+# If the optional second parameter is 'public', the public path will be
+# prepended to the folder path.
 # Usage: removeFile "path/to/file"
 removeFile () {
-    if [[ -e "$1" ]]; then
-        rm "$1"
+    if [[ $2 == 'public' ]]; then
+        local public="$PUBLIC_PATH/"
     fi
+
+    if [[ -e "$1" ]]; then
+        rm "$public$1"
+    fi
+}
+
+# The source path must be relative from $PROFILE_PATH/src/
+# If the optional third parameter is 'public', the public path will be
+# prepended to the dest path.
+# Usage: copyFile "source/path" "dest/path"
+copyFile () {
+    if [[ $3 == 'public' ]]; then
+        local public="$PUBLIC_PATH/"
+    fi
+
+    cp "$PROFILE_PATH/src/$1" "$public$2"
+}
+
+# The source path must be relative from $PROFILE_PATH/src/
+# If the optional third parameter is 'public', the public path will be
+# prepended to the dest path.
+# Usage: copyFolder "source/path" "dest/path"
+copyFolder () {
+    if [[ $3 == 'public' ]]; then
+        local public="$PUBLIC_PATH/"
+    fi
+
+    cp -R "$PROFILE_PATH/src/$1" "$public$2"
 }
 
 
@@ -194,9 +230,19 @@ removeLine () {
     php "$SOURCE_PATH"/helpers/removeLine.php "$1" "$2"
 }
 
+# The source path must be relative from $PROFILE_PATH/src/
+# If the optional third parameter is 'public', the public path will be
+# prepended to the dest path.
 # Usage: appendFile "source/file" "dest/file"
 appendFile () {
-    [[ -f "$1" && -f "$2" ]] || return
+    local src="$PROFILE_PATH/src/$1"
+    local dst="$2"
 
-    php "$SOURCE_PATH"/helpers/appendFile.php "$1" "$2"
+    if [[ $3 == 'public' ]]; then
+        local dst="$PUBLIC_PATH/$dst"
+    fi
+
+    [[ -f "$src" && -f "$dst" ]] || return
+
+    php "$SOURCE_PATH"/helpers/appendFile.php "$src" "$dst"
 }

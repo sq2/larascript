@@ -16,8 +16,8 @@
 
 # Add asset folders.
 # echo "Adding asset folders..."
-# createFolder "$PUBLIC_PATH/img"
-# createFolder "$PUBLIC_PATH/includes"
+# createFolder "img" public
+# createFolder "includes" public
 
 # Add view folders.
 # echo "Adding view folders..."
@@ -33,7 +33,7 @@
 echo "Copying customized files..."
 
 # Append to global.php file.
-appendFile "$PROFILE_PATH/src/app/start/global.php" app/start/global.php
+appendFile "app/start/global.php" app/start/global.php
 
 # Create a dedicated view composers file.
 # Note: This option depends on content in the
@@ -60,7 +60,7 @@ printf "<?php\n\n// View composers" > app/composers.php
 
 # Copy library folders.
 # echo "Copying library folders..."
-# cp -R "$PROFILE_PATH/lib" app/
+# copyFolder "app/lib" app/
 
 
 #-----------------------------------------------------------------------
