@@ -220,7 +220,7 @@ if [[ $environment == "y" ]]; then
     printf "<?php\n\nreturn array(\n\n\t'debug' => true,\n\n\t'url' => 'http://$domain',\n\n);" > app/config/local/app.php
 
     if [[ -e "$PROFILE_PATH/src/app/config/local/session.php" ]]; then
-        copyFile "app/config/local/session.php" app/config/local/
+        cp "$PROFILE_PATH/src/app/config/local/session.php" app/config/local/
         stringReplace "/" "'lifetime' => 120" "'lifetime' => $session_lifetime" app/config/local/session.php
 
         if [[ "$session_domain" != "null" ]]; then
@@ -436,7 +436,7 @@ if [[ $vhost_skip == false ]]; then
             CONF_PATH="$vhost_conf_path/${domain}.conf"
 
             # Remove conf file if exists.
-            if [[ -e "$CONF_PATH" ]]
+            if [[ -e "$CONF_PATH" ]]; then
                 rm "$CONF_PATH"
             fi
 

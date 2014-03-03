@@ -30,18 +30,23 @@ containsString () {
 # The g added after the separator will replace 'from' throughout file globally.
 # The s in the first arg is for sudo.
 stringReplace () {
-    sep=${1: -1}
-    global=""
+    local sep=${1: -1}
+    local global=""
 
     if [[ $1 == *g* ]]; then
-        global="g"
+        local global="g"
     fi
 
     if [[ $1 == *s* ]]; then
-        sudo gsed -i "s$sep${2}$sep${3}$sep$global" $4
+        sudo gsed -i "s$sep${2}$sep${3}$sep$global" "$4"
     else
-        gsed -i "s$sep${2}$sep${3}$sep$global" $4
+        gsed -i "s$sep${2}$sep${3}$sep$global" "$4"
     fi
+}
+
+# Usage: appendAfter "search" "content to add" "path/file"
+appendAfter () {
+    gsed -i "/${1}/ a\ ${2}" "$3"
 }
 
 
