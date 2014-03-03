@@ -249,7 +249,7 @@ if [[ $mysql_skip == false ]]; then
         sudo mysql -u$mysql_user -p$password -e"CREATE DATABASE $database"
 
         echo Updating database configuration file
-        stringReplace "/" "'database' => 'database'" "'database' => '$database'" app/config/database.php
+        stringReplace "/" "=> 'database'" "=> '$database'" app/config/database.php
         stringReplace "/" "'username'  => 'root'" "'username'  => '$mysql_user'" app/config/database.php
         stringReplace "/" "'password'  => ''" "'password'  => '$password'" app/config/database.php
     fi
