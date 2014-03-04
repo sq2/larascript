@@ -4,7 +4,7 @@
 # ------------------------------------------------------------------------------
 
 <IfModule mod_include.c>
-   <FilesMatch "^(artisan|composer.json|composer.lock|phpunit.xml)$">
+   <FilesMatch "^(artisan|composer.json|composer.lock|phpunit.xml|gulpfile.js)$">
       Order allow,deny
       Deny from all
    </FilesMatch>
