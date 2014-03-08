@@ -456,9 +456,10 @@ if [[ $vhost_skip == false ]]; then
                 cat "$SOURCE_PATH/src/vhost_conf_template" >> "$CONF_PATH"
             fi
 
-            stringReplace "@ g ${vhost_run_sudo}" "/Sites/example.dev" "$WORK_PATH" "$CONF_PATH"
-            stringReplace "@ g ${vhost_run_sudo}" "example.dev" "$domain" "$CONF_PATH"
-            stringReplace "/ ${vhost_run_sudo}" "user@example.com" "$vhost_server_email" "$CONF_PATH"
+            stringReplace "@ g ${vhost_run_sudo}" "/Sites/example.dev/public" "$PUBLIC_PATH" "$CONF_PATH"  # Set document root to pubic folder.
+            stringReplace "@ g ${vhost_run_sudo}" "/Sites/example.dev" "$WORK_PATH" "$CONF_PATH"  # Put Apache log files in project root folder.
+            stringReplace "@ g ${vhost_run_sudo}" "example.dev" "$domain" "$CONF_PATH"  # Set domain name.
+            stringReplace "/ ${vhost_run_sudo}" "user@example.com" "$vhost_server_email" "$CONF_PATH"  # Set server email address.
 
             # Edit hosts file
             echo "Updating hosts file..."
