@@ -713,6 +713,14 @@ FileETag None
 #   RewriteRule ^(.*)$ index.php?q=$1 [L,QSA] # Use for ModX CMS
 </IfModule>
 
+# Concrete5
+# <IfModule mod_rewrite.c>
+#     RewriteCond %{REQUEST_FILENAME} !-f
+#     RewriteCond %{REQUEST_FILENAME}/index.html !-f
+#     RewriteCond %{REQUEST_FILENAME}/index.php !-f
+#     RewriteRule . index.php [L]
+# </IfModule>
+
 # ------------------------------------------------------------------------------
 # | Persistent connections                                                     |
 # ------------------------------------------------------------------------------
